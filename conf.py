@@ -18,15 +18,15 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Hassan Kassem"  # (translatable)
-BLOG_TITLE = "Testing Nikola"  # (translatable)
+BLOG_TITLE = "Under Construction"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "https://example.com/"
+SITE_URL = "https://hikassem.github.io/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
 # BASE_URL = "https://example.com/"
-BLOG_EMAIL = "n.tesla@example.com"
-BLOG_DESCRIPTION = "This is a demo site for Nikola."  # (translatable)
+BLOG_EMAIL = " "
+BLOG_DESCRIPTION = "Another CFD blog"  # (translatable)
 
 # Nikola is multilingual!
 #
@@ -127,28 +127,29 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 #          with a ``/``, otherwise end them with ``/index.html`` — or
 #          else they won’t be highlighted when active.
 
-# NAVIGATION_LINKS = {
-#     DEFAULT_LANG: (
-#         ("/archive.html", "Archive"),
-#         ("/categories/", "Tags"),
-#         ("/rss.xml", "RSS feed"),
-#     ),
-# }
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ('/index.html', 'Home', 'icon-home'),
-        ('/archive.html', 'Archives', 'icon-folder-open-alt'),
-        ('/categories/index.html', 'Tags', 'icon-tags'),
-        ('/rss.xml', 'RSS', 'icon-rss'),
-        ('https://uk.linkedin.com/in/hassankassem10', 'About me', 'icon-linkedin'),
-        ('https://twitter.com/hikassem', 'My Twitter', 'icon-twitter'),
-        ('https://github.com/hikassem', 'My Github', 'icon-github'),
-    )
+        ("/archive.html", "Archive"),
+        ("/categories/", "Tags"),
+        ("/rss.xml", "RSS feed"),
+    ),
 }
+# NAVIGATION_LINKS = {
+#     DEFAULT_LANG: (
+#         ('/index.html', 'Home', 'icon-home'),
+#         ('/archive.html', 'Archives', 'icon-folder-open-alt'),
+#         ('/categories/index.html', 'Tags', 'icon-tags'),
+#         ('/rss.xml', 'RSS', 'icon-rss'),
+#         ('https://www.researchgate.net/profile/Hassan_Kassem10', 'Research', 'icon-user'),
+#         ('https://uk.linkedin.com/in/hassankassem10', 'LinkedIn', 'icon-linkedin'),
+#         ('https://twitter.com/hikassem', 'My Twitter', 'icon-twitter'),
+#         ('https://github.com/hikassem', 'My Github', 'icon-github'),
+#     )
+# }
 
 # Name of the theme to use.
-THEME = "zen-jinja"
-#THEME = "zen-ipython"
+THEME = "mytheme"
+#THEME = "zen-jinja"
 
 # Primary color of your theme. This will be used to customize your theme and
 # auto-generate related colors in POSTS_SECTION_COLORS. Must be a HEX value.
@@ -184,6 +185,8 @@ POSTS = (
     ("posts/*.txt", "posts", "post.tmpl"),
     ("posts/*.html", "posts", "post.tmpl"),
     ("posts/*.ipynb", "posts", "post.tmpl"),
+    ("posts/*.md", "posts", "post.tmpl"),
+
 )
 PAGES = (
     ("stories/*.rst", "stories", "story.tmpl"),
