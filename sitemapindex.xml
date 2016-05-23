@@ -6,27 +6,27 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
-  <loc>https://example.com/categories/cat_test.xml</loc>
+  <loc>https://hikassem.github.io/categories/cat_test.xml</loc>
   <lastmod>2016-05-22T12:09:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://example.com/categories/mathjax.xml</loc>
+  <loc>https://hikassem.github.io/categories/mathjax.xml</loc>
   <lastmod>2016-05-22T14:02:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://example.com/categories/rst.xml</loc>
+  <loc>https://hikassem.github.io/categories/rst.xml</loc>
   <lastmod>2016-05-22T12:09:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://example.com/categories/test.xml</loc>
+  <loc>https://hikassem.github.io/categories/test.xml</loc>
   <lastmod>2016-05-22T12:09:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://example.com/rss.xml</loc>
-  <lastmod>2016-05-22T14:02:00Z</lastmod>
+  <loc>https://hikassem.github.io/rss.xml</loc>
+  <lastmod>2016-05-23T13:25:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://example.com/sitemap.xml</loc>
-  <lastmod>2016-05-22T14:50:00Z</lastmod>
+  <loc>https://hikassem.github.io/sitemap.xml</loc>
+  <lastmod>2016-05-23T13:25:00Z</lastmod>
  </sitemap>
 </sitemapindex>
