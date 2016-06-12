@@ -18,15 +18,15 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Hassan Kassem"  # (translatable)
-BLOG_TITLE = "Under Construction"  # (translatable)
+BLOG_TITLE = "Hassan Kassem"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "https://hikassem.github.io/"
+SITE_URL = "https://hassankassem.me/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
 # BASE_URL = "https://example.com/"
-BLOG_EMAIL = " "
-BLOG_DESCRIPTION = "Another CFD blog"  # (translatable)
+BLOG_EMAIL = "Hassan.Kassem@gmail.com"
+BLOG_DESCRIPTION = "My Personal blog"  # (translatable)
 
 # Nikola is multilingual!
 #
@@ -129,9 +129,23 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/archive.html", "Archive"),
-        ("/categories/", "Tags"),
-        ("/rss.xml", "RSS feed"),
+        ('/index.html', 'Home'),
+        (
+            (
+                ("/posts/", 'Posts'),
+                ("/categories/", "Tags"),
+                ("/archive.html", "Archive"),
+            ),
+            'Blog'
+        ),
+        (
+            (
+                ('/curriculum-vitae', 'Curriculum Vitae'),
+                ('/publications', 'Publications'),
+                ('/contacts', 'Contacts'),
+            ),
+        'About Me'
+        ),
     ),
 }
 # NAVIGATION_LINKS = {
@@ -148,12 +162,11 @@ NAVIGATION_LINKS = {
 # }
 
 # Name of the theme to use.
-THEME = "mytheme"
-#THEME = "zen-jinja"
+THEME = "spacelab"
 
 # Primary color of your theme. This will be used to customize your theme and
 # auto-generate related colors in POSTS_SECTION_COLORS. Must be a HEX value.
-THEME_COLOR = '#5670d4'
+# THEME_COLOR = '#5670d4'
 
 # POSTS and PAGES contains (wildcard, destination, template) tuples.
 #
@@ -179,20 +192,19 @@ THEME_COLOR = '#5670d4'
 # to feeds and are considered part of a blog, while PAGES are
 # just independent HTML pages.
 #
-
+#POSTS = []
 POSTS = (
     ("posts/*.rst", "posts", "post.tmpl"),
     ("posts/*.txt", "posts", "post.tmpl"),
     ("posts/*.html", "posts", "post.tmpl"),
     ("posts/*.ipynb", "posts", "post.tmpl"),
     ("posts/*.md", "posts", "post.tmpl"),
-
 )
 PAGES = (
-    ("stories/*.rst", "stories", "story.tmpl"),
-    ("stories/*.txt", "stories", "story.tmpl"),
-    ("stories/*.html", "stories", "story.tmpl"),
-    ("stories/*.ipynb", "stories", "story.tmpl"),
+    ("pages/*.rst", "", "story.tmpl"),
+    ("pages/*.txt", "", "story.tmpl"),
+    ("pages/*.html", "", "story.tmpl"),
+    ("pages/*.ipynb", "", "story.tmpl"),
 
 )
 
@@ -479,7 +491,7 @@ HIDDEN_AUTHORS = ['Guest']
 
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
-# INDEX_PATH = ""
+INDEX_PATH = "posts"
 
 # Optional HTML that displayed on “main” blog index.html files.
 # May be used for a greeting. (translatable)
@@ -802,7 +814,11 @@ FEED_LINKS_APPEND_QUERY = False
 
 # A HTML fragment describing the license, for the sidebar.
 # (translatable)
-LICENSE = ""
+LICENSE = """
+<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<img alt="Creative Commons License BY-NC-SA"
+style="border-width:0; margin-bottom:12px;"
+src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a>"""
 # I recommend using the Creative Commons' wizard:
 # https://creativecommons.org/choose/
 # LICENSE = """
@@ -1127,13 +1143,13 @@ UNSLUGIFY_TITLES = True
 # Uncomment and modify to following lines to match your accounts.
 # Images displayed come from the `previewimage` meta tag.
 # You can specify the card type by using the `card` parameter in TWITTER_CARD.
-# TWITTER_CARD = {
-#     # 'use_twitter_cards': True,  # enable Twitter Cards
-#     # 'card': 'summary',          # Card type, you can also use 'summary_large_image',
-#                                   # see https://dev.twitter.com/cards/types
-#     # 'site': '@website',         # twitter nick for the website
-#     # 'creator': '@username',     # Username for the content creator / author.
-# }
+TWITTER_CARD = {
+    'use_twitter_cards': True,  # enable Twitter Cards
+    'card': 'summary',          # Card type, you can also use 'summary_large_image',
+                                  # see https://dev.twitter.com/cards/types
+    # 'site': '@website',         # twitter nick for the website
+    'creator': '@HIKASSEM',     # Username for the content creator / author.
+}
 
 # If webassets is installed, bundle JS and CSS into single files to make
 # site loading faster in a HTTP/1.1 environment but is not recommended for
