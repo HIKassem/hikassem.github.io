@@ -1,7 +1,7 @@
 .. title: Welcome
 .. slug: index
 .. date: 2016-06-11 12:18:41 UTC+01:00
-.. tags: mathjax
+.. tags: 
 .. category:
 .. link:
 .. description:
