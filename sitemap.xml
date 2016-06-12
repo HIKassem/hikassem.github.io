@@ -6,59 +6,63 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
-  <loc>https://hikassem.github.io/</loc>
-  <lastmod>2016-05-23T13:16:00Z</lastmod>
+  <loc>https://hassankassem.me/</loc>
+  <lastmod>2016-06-11T15:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/2016/</loc>
-  <lastmod>2016-05-23T13:25:00Z</lastmod>
+  <loc>https://hassankassem.me/2016/</loc>
+  <lastmod>2016-06-11T11:11:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/archive.html</loc>
-  <lastmod>2016-05-23T13:25:00Z</lastmod>
+  <loc>https://hassankassem.me/about-me/</loc>
+  <lastmod>2016-05-31T09:47:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/categories/</loc>
-  <lastmod>2016-05-23T13:16:00Z</lastmod>
+  <loc>https://hassankassem.me/archive.html</loc>
+  <lastmod>2016-06-12T19:20:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/categories/cat_test/</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/blog/</loc>
+  <lastmod>2016-06-11T11:06:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/categories/mathjax/</loc>
-  <lastmod>2016-05-22T12:47:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/</loc>
+  <lastmod>2016-06-11T14:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/categories/rst/</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/cat_meshing/</loc>
+  <lastmod>2016-06-11T14:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/categories/test/</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/cfd/</loc>
+  <lastmod>2016-06-11T14:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/mathjax-test/</loc>
-  <lastmod>2016-05-22T13:47:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/foam/</loc>
+  <lastmod>2016-06-11T14:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/post-one/</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/contacts/</loc>
+  <lastmod>2016-06-11T15:16:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/post-three/</loc>
-  <lastmod>2016-05-22T12:23:00Z</lastmod>
+  <loc>https://hassankassem.me/curriculum-vitae/</loc>
+  <lastmod>2016-06-11T15:10:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/post-two-python/</loc>
-  <lastmod>2016-05-22T12:18:00Z</lastmod>
+  <loc>https://hassankassem.me/posts/</loc>
+  <lastmod>2016-06-11T11:19:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/postsipynb-posts-posttmpl/</loc>
-  <lastmod>2016-05-23T12:56:00Z</lastmod>
+  <loc>https://hassankassem.me/posts/under-construction/</loc>
+  <lastmod>2016-06-11T11:11:00Z</lastmod>
  </url>
  <url>
-  <loc>https://hikassem.github.io/posts/under-construction/</loc>
-  <lastmod>2016-05-23T13:25:00Z</lastmod>
+  <loc>https://hassankassem.me/publications/</loc>
+  <lastmod>2016-06-11T15:16:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://hassankassem.me/stories/about-me/</loc>
+  <lastmod>2016-05-31T09:39:00Z</lastmod>
  </url>
 </urlset>

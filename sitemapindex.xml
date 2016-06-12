@@ -6,27 +6,23 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
-  <loc>https://hikassem.github.io/categories/cat_test.xml</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/cat_meshing.xml</loc>
+  <lastmod>2016-06-12T19:17:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://hikassem.github.io/categories/mathjax.xml</loc>
-  <lastmod>2016-05-22T14:02:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/cfd.xml</loc>
+  <lastmod>2016-06-12T19:17:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://hikassem.github.io/categories/rst.xml</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/categories/foam.xml</loc>
+  <lastmod>2016-06-12T19:17:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://hikassem.github.io/categories/test.xml</loc>
-  <lastmod>2016-05-22T12:09:00Z</lastmod>
+  <loc>https://hassankassem.me/rss.xml</loc>
+  <lastmod>2016-06-12T19:20:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>https://hikassem.github.io/rss.xml</loc>
-  <lastmod>2016-05-23T13:25:00Z</lastmod>
- </sitemap>
- <sitemap>
-  <loc>https://hikassem.github.io/sitemap.xml</loc>
-  <lastmod>2016-05-23T13:25:00Z</lastmod>
+  <loc>https://hassankassem.me/sitemap.xml</loc>
+  <lastmod>2016-06-12T19:20:00Z</lastmod>
  </sitemap>
 </sitemapindex>
