@@ -1,4 +1,4 @@
-Sitemap: https://hassankassem.me/sitemapindex.xml
+Sitemap: http://hassankassem.me/sitemapindex.xml
 
 User-Agent: *
 Host: hassankassem.me
