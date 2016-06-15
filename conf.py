@@ -962,6 +962,9 @@ MathJax.Hub.Config({
 # If you set USE_KATEX to True, you also need to add an extra CSS file
 # like this:
 # EXTRA_HEAD_DATA = """<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">"""
+# EXTRA_HEAD_DATA = """
+# <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+# """
 # USE_KATEX = False
 
 # Do you want to customize the nbconversion of your IPython notebook?
@@ -1039,7 +1042,7 @@ MARKDOWN_EXTENSIONS = ['fenced_code', 'codehilite', 'extra']
 # Requires FEED_PLAIN = False. If the preview image is found in the content,
 # it will not be included again. Image will be included as-is, aim to optmize
 # the image source for Feedly, Apple News, Flipboard, and other popular clients.
-# FEED_PREVIEWIMAGE = True
+FEED_PREVIEWIMAGE = True
 
 # RSS_LINK is a HTML fragment to link the RSS or Atom feeds. If set to None,
 # the base.tmpl will use the feed Nikola generates. However, you may want to
