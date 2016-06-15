@@ -6,7 +6,7 @@
 .. link:
 .. description:
 .. type: text
-
+.. previewimage: images/Leo2.jpg
 
 Journals
 --------
