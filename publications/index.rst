@@ -7,7 +7,7 @@
 .. description:
 .. type: text
 
-.. previewimage: images/Leo2.jpg
+.. previewimage: Leo2.jpg
 
 Journals
 --------
