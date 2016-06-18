@@ -783,7 +783,7 @@ IMAGE_FOLDERS = {'images': 'images'}
 # )
 
 # Show teasers (instead of full posts) in indexes? Defaults to False.
-# INDEX_TEASERS = False
+INDEX_TEASERS = True
 
 # HTML fragments with the Read more... links.
 # The following tags exist and are replaced for you:
@@ -1121,6 +1121,19 @@ BODY_END = """
   ga('send', 'pageview');
 
 </script>
+
+<script type="text/javascript" src="http://panzi.github.io/SocialSharePrivacy/javascripts/jquery.cookies.js"></script>
+<script type="application/x-social-share-privacy-settings">
+{"path_prefix":"http://panzi.github.io/SocialSharePrivacy/",
+"layout":"line","services":{"buffer":{"status":false},"delicious":
+{"status":false},"disqus":{"status":false},"flattr":{"status":false},
+"hackernews":{"status":false},"pinterest":{"status":false},"reddit":{"status":false},
+"stumbleupon":{"status":false},"tumblr":{"status":false},"xing":{"status":false}}}
+</script>
+<script type="text/javascript">(function () {var s = document.createElement('script');
+var t = document.getElementsByTagName('script')[0];s.type = 'text/javascript';
+s.async = true;s.src = 'http://panzi.github.io/SocialSharePrivacy/javascripts/jquery.socialshareprivacy.min.autoload.js';
+t.parentNode.insertBefore(s, t);})();</script>
 """
 
 # The possibility to extract metadata from the filename by using a
