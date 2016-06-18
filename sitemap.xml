@@ -10,8 +10,12 @@
   <lastmod>2016-06-15T17:19:00Z</lastmod>
  </url>
  <url>
+  <loc>http://hassankassem.me/2016/</loc>
+  <lastmod>2016-06-18T18:05:00Z</lastmod>
+ </url>
+ <url>
   <loc>http://hassankassem.me/archive.html</loc>
-  <lastmod>2016-06-15T16:56:00Z</lastmod>
+  <lastmod>2016-06-18T18:05:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/categories/</loc>
@@ -91,7 +95,11 @@
  </url>
  <url>
   <loc>http://hassankassem.me/posts/</loc>
-  <lastmod>2016-06-15T16:56:00Z</lastmod>
+  <lastmod>2016-06-18T18:05:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://hassankassem.me/posts/my-first-post/</loc>
+  <lastmod>2016-06-18T18:05:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/publications/</loc>
