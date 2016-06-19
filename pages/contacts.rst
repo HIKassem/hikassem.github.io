@@ -9,7 +9,7 @@
 
 
 
-|RG|_   |tw|_   |in|_
+|RG|_   |tw|_   |in|_   |git|_
 
 .. |tw| image:: /images/tw.png
    :height: 124 px
@@ -21,6 +21,10 @@
 .. |in| image:: /images/in.png
    :scale: 100%
    :align: middle
+.. |git| image:: /images/git.png
+   :scale: 100%
+   :align: middle
 .. _tw : https://twitter.com/HIKassem
 .. _RG : https://www.researchgate.net/profile/Hassan_Kassem10
 .. _in : https://uk.linkedin.com/in/hassankassem10
+.. _git : https://github.com/HIKassem
