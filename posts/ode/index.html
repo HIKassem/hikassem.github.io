@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<base href="http://hassankassem.me/posts/ode/">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to solve ODE in OpenFOAM | Hassan Kassem</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="http://hassankassem.me/posts/ode/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Hassan Kassem">
+<link rel="prev" href="../my-first-post/" title="My First Post" type="text/html">
+<meta property="og:site_name" content="Hassan Kassem">
+<meta property="og:title" content="How to solve ODE in OpenFOAM">
+<meta property="og:url" content="http://hassankassem.me/posts/ode/">
+<meta property="og:description" content="OpenFOAM [1] has a library designed to solve ordinary differential equations (ODEs).
+It is widely used for solving chemistry in OpenFOAM. This post focuses on
+how to solve any ODE in OpenFOAM. it is n">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2016-06-19T10:21:19+01:00">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="gnuplot">
+<meta property="article:tag" content="mathjax">
+<meta property="article:tag" content="ODE">
+<meta property="article:tag" content="OpenFOAM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@HIKASSEM">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://hassankassem.me/">
+
+                <span id="blog-title">Hassan Kassem</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../index.html">Home</a>
+            </li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blog <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+<li>
+<a href="../">Posts</a>
+                    </li>
+<li>
+<a href="../../categories/">Tags</a>
+                    </li>
+<li>
+<a href="../../archive.html">Archive</a>
+            </li>
+</ul>
+</li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About Me <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+<li>
+<a href="../../curriculum-vitae">Curriculum Vitae</a>
+                    </li>
+<li>
+<a href="../../publications">Publications</a>
+                    </li>
+<li>
+<a href="../../contacts">Contacts</a>
+            </li>
+</ul>
+</li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+    <a href="index.rst" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">How to solve ODE in OpenFOAM</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                    Hassan Kassem
+            </span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2016-06-19T10:21:19+01:00" itemprop="datePublished" title="2016-06-19 10:21">2016-06-19 10:21</time></a></p>
+                <p class="commentline">
+        
+    <a href="#disqus_thread" data-disqus-identifier="cache/posts/ode.html">Comments</a>
+
+
+            
+        </p>
+<p class="sourceline"><a href="index.rst" id="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<!-- How to solve ODE in OpenFOAM -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<p>OpenFOAM <a class="footnote-reference" href="#id6" id="id1">[1]</a> has a library designed to solve ordinary differential equations (ODEs).
+It is widely used for solving chemistry in OpenFOAM. This post focuses on
+how to solve any ODE in OpenFOAM. it is not intended to be a complete review or
+explaining every ODE solver, however, this post shows step-by-step how to define
+an ODE and how to write a small program to solve it. Finally, the results will be
+compared and plotted aginst the extract solution using Gnuplot.</p>
+<!-- TEASER_END: click to read the rest of the article -->
+<div class="section" id="mathematical-background">
+<h2><a class="toc-backref" href="#id10">Mathematical background</a></h2>
+<div class="contents alert alert-info pull-right topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#mathematical-background" id="id10">Mathematical background</a></li>
+<li><a class="reference internal" href="#equation-of-motion" id="id11">Equation of motion</a></li>
+<li><a class="reference internal" href="#where-to-start" id="id12">Where to start?</a></li>
+<li>
+<a class="reference internal" href="#implementation" id="id13">Implementation</a><ul>
+<li><a class="reference internal" href="#myode" id="id14"><tt class="docutils literal">myODE</tt></a></li>
+<li><a class="reference internal" href="#main-program" id="id15"><tt class="docutils literal">main</tt> program</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validation" id="id16">Validation</a></li>
+<li><a class="reference internal" href="#final-remarks" id="id17">Final remarks</a></li>
+</ul>
+</div>
+<p>In order to solve any high order ODE numerically, it should be reduced first to
+a system of first order ODEs. This process of order reduction produces a number
+of ODEs equal to the order of the original ODE. Here, the reduction process as
+described by Ferziger <a class="footnote-reference" href="#id7" id="id2">[2]</a> for general high order ODE,</p>
+<div class="math">
+\begin{equation*}
+y^n = f(x,y,y',\cdots y^{n-1})
+\end{equation*}
+</div>
+<p>where <span class="math">\(n\)</span> is the order. Then it can be redefined as (transformation),</p>
+<div class="math">
+\begin{align*}
+y_1 &amp;= y \\
+y_j &amp;= y^{j-1} \quad j=1,2,\cdots n-1
+\end{align*}
+</div>
+<p>Finally, the system could be represented as (differentiation),</p>
+<div class="math">
+\begin{align*}
+y'_j &amp;= y_j+1 \quad j=1,2,\cdots n-1\\
+y'_n &amp;= f(x,y_1,y_2,\cdots y_n)
+\end{align*}
+</div>
+<p>As described above, the process could be summarised into two steps; a
+transformation of variables and differentiation. In OpenFOAM, there is an extra
+step required for stiff system solvers only. These solvers require the jacobian
+matrix and the time partial derivatives.</p>
+<div class="math">
+\begin{equation*}
+J =
+\begin{bmatrix}
+\frac{\partial f_1}{\partial y_1} &amp; \frac{\partial f_1}{\partial y_2} &amp;
+\cdots &amp;\frac{\partial f_1}{\partial y_n}\\
+\frac{\partial f_2}{\partial y_1} &amp; \frac{\partial f_2}{\partial y_2} &amp;
+\cdots &amp;\frac{\partial f_2}{\partial y_n}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial f_n}{\partial y_1} &amp; \cdots &amp; \cdots
+&amp;\frac{\partial f_n}{\partial y_n}
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>Where <span class="math">\(f_n\)</span> is the equation <span class="math">\(n\)</span> in the reduced system. Also the
+time partial derivatives are required,</p>
+<div class="math">
+\begin{equation*}
+\frac{\partial f_1}{\partial t} \cdots \frac{\partial f_n}{\partial t}
+\end{equation*}
+</div>
+</div>
+<div class="section" id="equation-of-motion">
+<h2><a class="toc-backref" href="#id11">Equation of motion</a></h2>
+<p>The equation of motion of single degree of freedom system (simple mass-spring
+system) , which is a second order ODE, will be used here as an example.</p>
+<div class="math">
+\begin{align*}
+m\ddot{x} + kx &amp;= 0 \\
+\ddot{x} &amp;= -\frac{k}{m}x
+\end{align*}
+</div>
+<p>where <span class="math">\(m\)</span> is the mass, <span class="math">\(k\)</span> is the stiffness and <span class="math">\(x\)</span> is the
+displacement.</p>
+<p>This equation has an exact solution represents the harmonic oscillation of the
+system as (assuming zero initial velocity);</p>
+<div class="math">
+\begin{equation*}
+x = x_0 \cos(\omega t)
+\end{equation*}
+</div>
+<p>where <span class="math">\(x_0\)</span> is the initial displacement and <span class="math">\(\omega\)</span> is the natural
+frequency of the system <span class="math">\(\omega=\sqrt{k/m}\)</span>.</p>
+<p>It is the time to apply the methodology described in the previous section (<a class="reference internal" href="#mathematical-background">Mathematical background</a>) on the
+equation of motion.</p>
+<ul>
+<li>
+<p class="first"><a class="reference internal" href="#step-a">Step A</a>: Transformation from <span class="math">\(x\)</span> to <span class="math">\(y\)</span></p>
+<blockquote>
+<div class="math" id="step-a">
+\begin{align*}
+y_1 &amp;= x \\
+y_2 &amp;= \dot{x}
+\end{align*}
+</div>
+</blockquote>
+</li>
+<li>
+<p class="first"><a class="reference internal" href="#step-b">Step B</a>: Differentiation (substitute first)</p>
+<blockquote>
+<div class="math" id="step-b">
+\begin{equation*}
+\ddot{x} = -\frac{k}{m}y_1
+\end{equation*}
+</div>
+<p>then,</p>
+<div class="math">
+\begin{align*}
+\dot{y_1} &amp;= \dot{x} = y_2\\
+\dot{y_2} &amp;= \ddot{x} = -\frac{k}{m}y_1
+\end{align*}
+</div>
+</blockquote>
+</li>
+<li>
+<p class="first"><a class="reference internal" href="#step-c">Step C</a>: Jacobian (optional)</p>
+<blockquote>
+<p id="step-c">The Jacobian matrix is required for stiff solvers only. For this case,
+it is just <span class="math">\((2\times2)\)</span> matrix,</p>
+<div class="math">
+\begin{equation*}
+J =
+\begin{bmatrix}
+0.0 &amp; 1.0 \\
+-k/m &amp; 0
+\end{bmatrix}
+\end{equation*}
+</div>
+<p>and time derivatives,</p>
+<div class="math">
+\begin{align*}
+\frac{\partial f_1}{\partial t} &amp;= 0 \\
+\frac{\partial f_2}{\partial t} &amp;= 0
+\end{align*}
+</div>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="where-to-start">
+<h2><a class="toc-backref" href="#id12">Where to start?</a></h2>
+<p>It is typical in OpenFOAM to search for a similar implementation as a starting
+point. Fortunately, there is a small test program included in OpenFOAM source
+files. It is described in details in <a class="footnote-reference" href="#id8" id="id3">[3]</a>. So copy it to your
+run directory then compile and run it. (<tt class="docutils literal">RKCK45</tt> is one of OpenFOAM ODE
+solvers).</p>
+<pre class="code console"><a name="rest_code_96a9c4b453ce4ec99defe848c282e59b-1"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_APP</span>/test/ODE .
+<a name="rest_code_96a9c4b453ce4ec99defe848c282e59b-2"></a><span class="gp">$</span> wmake
+<a name="rest_code_96a9c4b453ce4ec99defe848c282e59b-3"></a><span class="gp">$</span> Test-ODE RKCK45
+</pre>
+<p>You should get a lot of numbers on the screen and finally you should see;</p>
+<pre class="code console"><a name="rest_code_1a095a548b5f4e13889d6221ac6c5250-1"></a><span class="go">Analytical: y(2.0) = 4(0.223891 0.576725 0.352834 0.128943)</span>
+<a name="rest_code_1a095a548b5f4e13889d6221ac6c5250-2"></a><span class="go">Numerical:  y(2.0) = 4(0.223891 0.576725 0.352835 0.128943), dxEst = 0.402302</span>
+</pre>
+<p class="alert alert-info">Please note that since OpenFOAM-2.3 version, the ordinary differential equation
+solvers have been updated <a class="footnote-reference" href="#id9" id="id4">[4]</a>. Therefore Zongyuan <a class="footnote-reference" href="#id8" id="id5">[3]</a> report has some
+outdated parts.</p>
+</div>
+<div class="section" id="implementation">
+<h2><a class="toc-backref" href="#id13">Implementation</a></h2>
+<p>The reduction step is essential to solve the equation and as it is described
+above. This step is important in OpenFOAM and in any other code like python or
+Octave/Matlab. The implementation in OpenFOAM is divided into two main classes;
+<tt class="docutils literal">ODEsystem</tt> and <tt class="docutils literal">ODEsolver</tt>. From its name you can guess the function of
+each class. <tt class="docutils literal">ODEsystem</tt> is an abstract class defines the system of first order
+ODEs as explained above. <tt class="docutils literal">ODEsolver</tt> is the base class for all the ODE solvers
+in OpenFOAM.</p>
+<p>Back to <tt class="docutils literal"><span class="pre">Test-ODE.C</span></tt>, open it in any text editor (I prefer atom or qt-creator for
+big projects) and start examining the code. You will notice that the code is
+divided into two parts, the first part is the definitionn of class called
+<tt class="docutils literal">testODE</tt> and the second part is the <tt class="docutils literal">main</tt> function.</p>
+<div class="section" id="myode">
+<h3><a class="toc-backref" href="#id14"><tt class="docutils literal">myODE</tt></a></h3>
+<p>testODE is basically the ODE system definition which is inherited from the base
+abstract class <tt class="docutils literal">ODEsystem</tt>. Let's modify it to represent our equation. Before we
+start just rename it myODE. Also, modify the class constructor to allow passing
+<span class="math">\(m\)</span> and <span class="math">\(k\)</span> values from the main application.</p>
+<pre class="code c++"><a name="rest_code_c61caff009d54d629b3005a94bf39a72-1"></a><span class="k">class</span> <span class="nc">myODE</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-2"></a><span class="o">:</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-3"></a><span class="k">public</span> <span class="n">ODESystem</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-4"></a><span class="p">{</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-5"></a>    <span class="c1">//- Mass of the system</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-6"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">m_</span><span class="p">;</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-7"></a>    <span class="c1">//- Stiffness of the system</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">k_</span><span class="p">;</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-9"></a>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-10"></a>    <span class="k">public</span><span class="o">:</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-11"></a>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-12"></a>    <span class="n">myODE</span><span class="p">(</span><span class="k">const</span> <span class="n">mass</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">stiffness</span><span class="o">&amp;</span><span class="p">)</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-13"></a>    <span class="o">:</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-14"></a>    <span class="n">ODESystem</span><span class="p">(),</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-15"></a>    <span class="n">m_</span><span class="p">(</span><span class="n">mass</span><span class="p">),</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-16"></a>    <span class="n">k_</span><span class="p">(</span><span class="n">stiffness</span><span class="p">)</span>
+<a name="rest_code_c61caff009d54d629b3005a94bf39a72-17"></a><span class="p">{}</span>
+</pre>
+<p>This class has only three functions, namely, <tt class="docutils literal">nEqns</tt>,
+<tt class="docutils literal">derivatives</tt> and <tt class="docutils literal">jacobian</tt>. <tt class="docutils literal">nEqns</tt> represents the number of equation of this
+system which is essentially the order of the original equation (for this case
+is <span class="math">\(2\)</span>).</p>
+<pre class="code c++"><a name="rest_code_5643a4feb8a248fb951c2010155b749e-1"></a><span class="n">label</span> <span class="nf">nEqns</span><span class="p">()</span> <span class="k">const</span>
+<a name="rest_code_5643a4feb8a248fb951c2010155b749e-2"></a><span class="p">{</span>
+<a name="rest_code_5643a4feb8a248fb951c2010155b749e-3"></a>    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+<a name="rest_code_5643a4feb8a248fb951c2010155b749e-4"></a><span class="p">}</span>
+</pre>
+<p>The second function is <tt class="docutils literal">derivatives</tt> which is the definition of the system of
+the first order ODEs (<a class="reference internal" href="#step-b">Step B</a>);</p>
+<pre class="code c++"><a name="rest_code_b3a5311877224754ae4b9df3d8964674-1"></a><span class="kt">void</span> <span class="nf">derivatives</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-2"></a><span class="p">(</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dydx</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-6"></a><span class="p">)</span> <span class="k">const</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-7"></a><span class="p">{</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-8"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-9"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a name="rest_code_b3a5311877224754ae4b9df3d8964674-10"></a><span class="p">}</span>
+</pre>
+<p>The third and final function in this class is <tt class="docutils literal">jacobian</tt> and it represents the
+jacobian matrix (<a class="reference internal" href="#step-c">Step C</a>) and the time derivatives of the system.</p>
+<pre class="code c++"><a name="rest_code_822d7ee449af4e28a1f144735a586383-1"></a><span class="kt">void</span> <span class="nf">jacobian</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-2"></a><span class="p">(</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dfdx</span><span class="p">,</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-6"></a>    <span class="n">scalarSquareMatrix</span><span class="o">&amp;</span> <span class="n">dfdy</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-7"></a><span class="p">)</span> <span class="k">const</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-8"></a><span class="p">{</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-9"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-10"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-11"></a>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-12"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-13"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-14"></a>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-15"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">);</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-16"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_822d7ee449af4e28a1f144735a586383-17"></a><span class="p">}</span>
+</pre>
+</div>
+<div class="section" id="main-program">
+<h3><a class="toc-backref" href="#id15"><tt class="docutils literal">main</tt> program</a></h3>
+<p>Now we have <tt class="docutils literal">myODE</tt> and it is time to solve the system. The first line inside the
+main function is basically to allow the program to read the <tt class="docutils literal">ODEsolver</tt> name
+from the command line. We will keep it and add extra two parameters for <span class="math">\(m\)</span>
+and <span class="math">\(k\)</span> (lines 7 &amp; 8).</p>
+<p>Please read the comments inside the code carefully.  One point could cause
+confusion here is <tt class="docutils literal">yStart</tt> (line 31). It is <tt class="docutils literal">scalarField</tt> has the same size as the system
+(order). <tt class="docutils literal">yStart</tt> has two functions here, the fist one is applying the initial
+conditions. In our case and according to (<a class="reference internal" href="#step-a">Step A</a>), these initial conditions are
+the system initial displacement and velocity. The second function of <tt class="docutils literal">yStart</tt>
+is storing the output results of the ODEsolver.</p>
+<table class="codetable"><tr>
+<td class="linenos"><div class="linenodiv"><pre><a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-1"> 1</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-2"> 2</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-3"> 3</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-4"> 4</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-5"> 5</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-6"> 6</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-7"> 7</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-8"> 8</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-9"> 9</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-10">10</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-11">11</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-12">12</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-13">13</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-14">14</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-15">15</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-16">16</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-17">17</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-18">18</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-19">19</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-20">20</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-21">21</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-22">22</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-23">23</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-24">24</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-25">25</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-26">26</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-27">27</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-28">28</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-29">29</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-30">30</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-31">31</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-32">32</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-33">33</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-34">34</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-35">35</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-36">36</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-37">37</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-38">38</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-39">39</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-40">40</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-41">41</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-42">42</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-43">43</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-44">44</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-45">45</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-46">46</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-47">47</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-48">48</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-49">49</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-50">50</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-51">51</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-52">52</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-53">53</a>
+<a href="#rest_code_f4a5884979304bc5a267bfbbc6fab7fb-54">54</a></pre></div></td>
+<td class="code"><pre class="code c++"><a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-1"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-2"></a><span class="p">{</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-3"></a>    <span class="n">argList</span><span class="o">::</span><span class="n">validArgs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"ODESolver"</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-4"></a>    <span class="n">argList</span> <span class="n">args</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-5"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-6"></a>    <span class="c1">// system properties (mass and stiffness)</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-7"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">mass</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="c1">// Kg</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">stiff</span> <span class="o">=</span> <span class="mf">2048.0</span><span class="p">;</span> <span class="c1">// N/m</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-9"></a>    <span class="c1">// Initial displacement</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-10"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">y0</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span> <span class="c1">// m</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-11"></a>    <span class="k">const</span> <span class="n">label</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-12"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">endTime</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="c1">// s</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-13"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-14"></a>    <span class="c1">// Create the ODE system as object of type myODE</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-15"></a>    <span class="n">myODE</span> <span class="n">ode</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span><span class="n">stiff</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-16"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-17"></a>    <span class="c1">// Create dictionary and add the odeSolver name</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-18"></a>    <span class="n">dictionary</span> <span class="n">dict</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-19"></a>    <span class="n">dict</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">"solver"</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-20"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-21"></a>    <span class="c1">// Create the selected ODE system solver</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-22"></a>    <span class="n">autoPtr</span><span class="o">&lt;</span><span class="n">ODESolver</span><span class="o">&gt;</span> <span class="n">odeSolver</span> <span class="o">=</span> <span class="n">ODESolver</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">ode</span><span class="p">,</span> <span class="n">dict</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-23"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-24"></a>    <span class="c1">// Initialise the ODE system fields</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-25"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-26"></a>    <span class="c1">// Start time</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-27"></a>    <span class="n">scalar</span> <span class="n">xStart</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-28"></a>    <span class="c1">// time step</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-29"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">endTime</span><span class="o">/</span><span class="n">n</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-30"></a>    <span class="c1">// Initial displacement and velocity</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-31"></a>    <span class="n">scalarField</span> <span class="n">yStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-32"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y0</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-33"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-34"></a>    <span class="c1">// integration initial step</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-35"></a>    <span class="n">scalar</span> <span class="n">dxEst</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-36"></a>    <span class="n">scalar</span> <span class="n">xEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-37"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-38"></a>    <span class="c1">// Required to store dydx</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-39"></a>    <span class="n">scalarField</span> <span class="n">dyStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-40"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-41"></a>    <span class="c1">// Integration loop</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-42"></a>    <span class="k">for</span> <span class="p">(</span><span class="n">label</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-43"></a>    <span class="p">{</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-44"></a>        <span class="n">xEnd</span> <span class="o">=</span> <span class="n">xStart</span> <span class="o">+</span> <span class="n">dx</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-45"></a>        <span class="n">ode</span><span class="p">.</span><span class="n">derivatives</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dyStart</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-46"></a>        <span class="n">odeSolver</span><span class="o">-&gt;</span><span class="n">solve</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">xEnd</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dxEst</span><span class="p">);</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-47"></a>        <span class="n">xStart</span> <span class="o">=</span> <span class="n">xEnd</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-48"></a>        <span class="n">Info</span> <span class="o">&lt;&lt;</span> <span class="n">xStart</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-49"></a>    <span class="p">}</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-50"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-51"></a>    <span class="n">Info</span><span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">End</span><span class="se">\n</span><span class="s">"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-52"></a>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-53"></a>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_f4a5884979304bc5a267bfbbc6fab7fb-54"></a><span class="p">}</span>
+</pre></td>
+</tr></table>
+<p>Finally, compile the code and run it. Direct the output to a file so it could be
+used for postprocessing.</p>
+<pre class="code console"><a name="rest_code_018a1bb30a4945f6913005440a834de8-1"></a><span class="gp">$</span> wmake
+<a name="rest_code_018a1bb30a4945f6913005440a834de8-2"></a><span class="gp">$</span> Test-ODE RKCK45 &gt; log
+</pre>
+</div>
+</div>
+<div class="section" id="validation">
+<h2><a class="toc-backref" href="#id16">Validation</a></h2>
+<p>As mentioned before (<a class="reference internal" href="#equation-of-motion">Equation of motion</a>), this ODE has an exact solution.
+It is basically a harmonic oscillation which could be represented as
+(after applying the initial conditions and system properties),</p>
+<div class="math">
+\begin{equation*}
+x(t) = 0.2 \cos(32t)
+\end{equation*}
+</div>
+<p>A quick and easy way to compare the results is by using gnuplot to visualise
+the results.</p>
+<div class="figure">
+<a class="reference external image-reference" href="../../images/results.png"><img alt="/images/results.png" src="../../images/results.png"></a>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name">
+<col class="field-body">
+<tbody valign="top"><tr class="field">
+<th class="field-name">Gnuplot Script:</th>
+<td class="field-body"></td>
+</tr></tbody>
+</table>
+<pre class="code bash"><a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-1"></a><span class="c1"># system properties</span>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-2"></a><span class="nv">mass</span> <span class="o">=</span> 2.0
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-3"></a><span class="nv">stiff</span> <span class="o">=</span> 2048.0
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-4"></a><span class="nv">x0</span> <span class="o">=</span> 0.2
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-5"></a>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-6"></a><span class="nb">set</span> grid
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-7"></a><span class="nb">set</span> samples 200
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-8"></a><span class="nb">set</span> xlabel <span class="s1">'Time (s)'</span>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-9"></a><span class="nb">set</span> ylabel <span class="s1">'Displacement (m)'</span>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-10"></a><span class="nb">set</span> yrange <span class="o">[</span>-0.3:0.3<span class="o">]</span>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-11"></a>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-12"></a>f<span class="o">(</span>x<span class="o">)</span> <span class="o">=</span> x0*cos<span class="o">(</span>sqrt<span class="o">(</span>stiff/mass<span class="o">)</span>*x<span class="o">)</span>
+<a name="rest_code_1c30e7c2b2c94ebaab731aa36a6dda44-13"></a>plot <span class="s1">'log'</span> u 1:2 w p lw <span class="m">2</span> t <span class="s2">"OpenFOAM"</span>, f<span class="o">(</span>x<span class="o">)</span> w l lw <span class="m">2</span> t <span class="s2">"Exact"</span>
+</pre>
+</div>
+<div class="section" id="final-remarks">
+<h2><a class="toc-backref" href="#id17">Final remarks</a></h2>
+<p>This post is meant to be minimal as possible and to be focused on solving ODE.
+Therefore, there are many possibilities to improve the main program. The system
+properties can be read from the command line directly or , even better, all the
+inputs could be included in one <tt class="docutils literal">dictionary</tt> (OpenFoam style). Also, the output
+result could be formatted in a better elegant way. Moreover, the results can be
+written to a file. Finally, the <tt class="docutils literal">solve</tt> function is an overloaded function, so
+it can be used with different input argument.</p>
+<p class="alert alert-info">Please feel free to comment below. Your feedback will be highly appreciated.</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup>
+<col class="label">
+<col>
+</colgroup>
+<tbody valign="top"><tr>
+<td class="label"><a class="fn-backref" href="#id1">[1]</a></td>
+<td>OpenFOAM® and OpenCFD® are registered trademarks of OpenCFD Limited,
+the producer OpenFOAM software. All registered trademarks are property
+of their respective owners. This offering is not approved or endorsed
+by OpenCFD Limited, the producer of the OpenFOAM software and owner
+of the OPENFOAM® and OpenCFD® trade marks.
+Hassan Kassem is not associated to OpenCFD.</td>
+</tr></tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup>
+<col class="label">
+<col>
+</colgroup>
+<tbody valign="top"><tr>
+<td class="label"><a class="fn-backref" href="#id2">[2]</a></td>
+<td>Ferziger, Joel H. 1998. Numerical Methods for Engineering Applications. Wiley.</td>
+</tr></tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup>
+<col class="label">
+<col>
+</colgroup>
+<tbody valign="top"><tr>
+<td class="label"><a class="fn-backref" href="#id3">[3]</a></td>
+<td>Zongyuan, Gu 2009. <a class="reference external" href="http://www.tfd.chalmers.se/~hani/kurser/OS_CFD_2008/ZongyuanGu/reportZongyuan.pdf">Introduction to ODE solvers and their application in OpenFOAM</a>. Chalmers.</td>
+</tr></tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup>
+<col class="label">
+<col>
+</colgroup>
+<tbody valign="top"><tr>
+<td class="label"><a class="fn-backref" href="#id4">[4]</a></td>
+<td>
+<a class="reference external" href="http://openfoam.org/release/2-3-0/numerics/">Numerical methods</a>. OpenFOAM 2.3.0 relase notes 2014.</td>
+</tr></tbody>
+</table>
+<div data-social-share-privacy="true"></div>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/c%2B%2B/" rel="tag">C++</a></li>
+            <li><a class="tag p-category" href="../../categories/gnuplot/" rel="tag">gnuplot</a></li>
+            <li><a class="tag p-category" href="../../categories/ode/" rel="tag">ODE</a></li>
+            <li><a class="tag p-category" href="../../categories/openfoam/" rel="tag">OpenFOAM</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../my-first-post/" rel="prev" title="My First Post">Previous post</a>
+            </li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+        
+        
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="foamblog",
+            disqus_url="http://hassankassem.me/posts/ode/",
+        disqus_title="How to solve ODE in OpenFOAM",
+        disqus_identifier="cache/posts/ode.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script><script type="text/x-mathjax-config">
+            MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+            </script></article><script>var disqus_shortname="foamblog";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2016         <a href="mailto:Hassan.Kassem@gmail.com">Hassan Kassem</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png"></a><br>
+This work by <a xmlns:cc="http://creativecommons.org/ns#" href="#" property="cc:attributionName" rel="cc:attributionURL">Hassan Kassem</a> is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+License</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates --><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79376542-1', 'auto');
+  ga('send', 'pageview');
+
+</script><script type="text/javascript" src="http://panzi.github.io/SocialSharePrivacy/javascripts/jquery.cookies.js"></script><script type="application/x-social-share-privacy-settings">
+{"path_prefix":"http://panzi.github.io/SocialSharePrivacy/",
+"layout":"line","services":{"buffer":{"status":false},"delicious":
+{"status":false},"disqus":{"status":false},"flattr":{"status":false},
+"hackernews":{"status":false},"pinterest":{"status":false},"reddit":{"status":false},
+"stumbleupon":{"status":false},"tumblr":{"status":false},"xing":{"status":false}}}
+</script><script type="text/javascript">(function () {var s = document.createElement('script');
+var t = document.getElementsByTagName('script')[0];s.type = 'text/javascript';
+s.async = true;s.src = 'http://panzi.github.io/SocialSharePrivacy/javascripts/jquery.socialshareprivacy.min.autoload.js';
+t.parentNode.insertBefore(s, t);})();</script>
+</body>
+</html>

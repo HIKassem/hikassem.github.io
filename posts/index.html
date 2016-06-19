@@ -12,19 +12,7 @@
 <meta content="#5670d4" name="theme-color">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.xml">
 <link rel="canonical" href="http://hassankassem.me/posts/">
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-        processEscapes: true
-    },
-    displayAlign: 'left', // Change this to 'center' to center equations.
-    "HTML-CSS": {
-        styles: {'.MathJax_Display': {"margin": 0}}
-    }
-});
-</script><!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]-->
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -94,7 +82,33 @@ MathJax.Hub.Config({
 
     
 <div class="postindex">
-    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="my-first-post/" class="u-url">My First Post</a></h1>
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="ode/" class="u-url">How to solve ODE in OpenFOAM</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                Hassan Kassem
+            </span></p>
+            <p class="dateline"><a href="ode/" rel="bookmark"><time class="published dt-published" datetime="2016-06-19T10:21:19+01:00" title="2016-06-19 10:21">2016-06-19 10:21</time></a></p>
+                <p class="commentline">
+        
+    <a href="ode/#disqus_thread" data-disqus-identifier="cache/posts/ode.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="p-summary entry-summary">
+    <div>
+<!-- How to solve ODE in OpenFOAM -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<p>OpenFOAM <a class="footnote-reference" href="ode/#id6" id="id1">[1]</a> has a library designed to solve ordinary differential equations (ODEs).
+It is widely used for solving chemistry in OpenFOAM. This post focuses on
+how to solve any ODE in OpenFOAM. it is not intended to be a complete review or
+explaining every ODE solver, however, this post shows step-by-step how to define
+an ODE and how to write a small program to solve it. Finally, the results will be
+compared and plotted aginst the extract solution using Gnuplot.</p>
+<p class="more"><a href="ode/"> click to read the rest of the article …</a></p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="my-first-post/" class="u-url">My First Post</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn">
                 Hassan Kassem
@@ -124,7 +138,9 @@ OpenFOAM which were not available when I started using it six years ago.</p>
 
 
         
-       <script>var disqus_shortname="foamblog";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script>
+       <script>var disqus_shortname="foamblog";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script><script type="text/x-mathjax-config">
+            MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+            </script>
 </div>
         <!--End of body content-->
 

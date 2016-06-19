@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hassan Kassem (mathjax)</title><link>http://hassankassem.me/</link><description></description><atom:link href="http://hassankassem.me/categories/mathjax.xml" type="application/rss+xml" rel="self"></atom:link><language>en</language><lastBuildDate>Sun, 19 Jun 2016 09:51:16 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>How to solve ODE in OpenFOAM</title><link>http://hassankassem.me/posts/ode/</link><dc:creator>Hassan Kassem</dc:creator><description>&lt;div&gt;&lt;!-- How to solve ODE in OpenFOAM --&gt;
+&lt;!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - --&gt;
+&lt;p&gt;OpenFOAM &lt;a class="footnote-reference" href="http://hassankassem.me/posts/ode/#id6" id="id1"&gt;[1]&lt;/a&gt; has a library designed to solve ordinary differential equations (ODEs).
+It is widely used for solving chemistry in OpenFOAM. This post focuses on
+how to solve any ODE in OpenFOAM. it is not intended to be a complete review or
+explaining every ODE solver, however, this post shows step-by-step how to define
+an ODE and how to write a small program to solve it. Finally, the results will be
+compared and plotted aginst the extract solution using Gnuplot.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://hassankassem.me/posts/ode/"&gt; click to read the rest of the article …&lt;/a&gt; (7 min remaining to read)&lt;/p&gt;&lt;/div&gt;</description><category>C++</category><category>gnuplot</category><category>mathjax</category><category>ODE</category><category>OpenFOAM</category><guid>http://hassankassem.me/posts/ode/</guid><pubDate>Sun, 19 Jun 2016 09:21:19 GMT</pubDate></item></channel></rss>

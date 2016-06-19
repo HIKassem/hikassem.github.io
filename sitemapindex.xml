@@ -6,11 +6,31 @@
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
+  <loc>http://hassankassem.me/categories/c%2B%2B.xml</loc>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://hassankassem.me/categories/gnuplot.xml</loc>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://hassankassem.me/categories/mathjax.xml</loc>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://hassankassem.me/categories/ode.xml</loc>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://hassankassem.me/categories/openfoam.xml</loc>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>http://hassankassem.me/rss.xml</loc>
-  <lastmod>2016-06-18T18:26:00Z</lastmod>
+  <lastmod>2016-06-19T09:25:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://hassankassem.me/sitemap.xml</loc>
-  <lastmod>2016-06-18T18:26:00Z</lastmod>
+  <lastmod>2016-06-19T09:27:00Z</lastmod>
  </sitemap>
 </sitemapindex>
