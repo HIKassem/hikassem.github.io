@@ -221,7 +221,7 @@ start just rename it myODE. Also, modify the class constructor to allow passing
 
         public:
 
-        myODE(const mass&, const stiffness&)
+        myODE(const scalar& mass, const scalar& stiffness)
         :
         ODESystem(),
         m_(mass),
@@ -414,6 +414,9 @@ it can be used with different input argument.
 
     Please feel free to comment below. Your feedback will be highly appreciated.
 
+.. class:: alert alert-info
+
+    Update: 23 June 2016, scalar type added to myODE constructor as pointed out by Mohamed Ouda 
 
 .. [#]  OpenFOAM® and OpenCFD® are registered trademarks of OpenCFD Limited,
         the producer OpenFOAM software. All registered trademarks are property
