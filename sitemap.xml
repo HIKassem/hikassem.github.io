@@ -15,11 +15,11 @@
  </url>
  <url>
   <loc>http://hassankassem.me/archive.html</loc>
-  <lastmod>2016-06-25T09:24:00Z</lastmod>
+  <lastmod>2016-06-25T17:44:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/categories/</loc>
-  <lastmod>2016-06-19T09:25:00Z</lastmod>
+  <lastmod>2016-06-25T18:59:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/categories/c%2B%2B/</loc>
@@ -40,6 +40,14 @@
  <url>
   <loc>http://hassankassem.me/categories/openfoam/</loc>
   <lastmod>2016-06-19T09:25:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://hassankassem.me/categories/template/</loc>
+  <lastmod>2016-06-25T18:59:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://hassankassem.me/categories/turbulencemodels/</loc>
+  <lastmod>2016-06-25T18:59:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/contacts/</loc>
@@ -115,11 +123,15 @@
  </url>
  <url>
   <loc>http://hassankassem.me/posts/</loc>
-  <lastmod>2016-06-19T09:25:00Z</lastmod>
+  <lastmod>2016-06-25T17:44:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/posts/my-first-post/</loc>
   <lastmod>2016-06-18T18:26:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://hassankassem.me/posts/newturbulencemodel/</loc>
+  <lastmod>2016-06-25T17:44:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/posts/ode/</loc>
