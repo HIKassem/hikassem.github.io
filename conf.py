@@ -146,6 +146,7 @@ NAVIGATION_LINKS = {
             ),
         'About Me'
         ),
+        ('/rss.xml', 'RSS'),
     ),
 }
 # NAVIGATION_LINKS = {
