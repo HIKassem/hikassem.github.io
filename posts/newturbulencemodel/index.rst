@@ -6,6 +6,7 @@
 .. link:
 .. description:
 .. type: text
+.. previewimage: /images/template.png
 
 .. figure:: /images/template.png
     :target: /images/template.png
