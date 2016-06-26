@@ -7,6 +7,10 @@
 .. description:
 .. type: text
 
+.. figure:: /images/template.png
+    :target: /images/template.png
+
+
 In OpenFOAM-3.0.0 [#]_, the turbulence models library had major facelift. Actually, it had major operation not just a facelift. Now, all models are based on one base template class including RANS, LES, incompressible and compressible. Therefore, if you followed most of the available tutorials on how to modify/implement turbulence model, it will not work. You will face many compiler errors from the first step. This post shows how to overcome this problem step-by-step. Moreover, it discusses briefly the reasons causing these errors.
 
 .. TEASER_END: click to read the rest of the article

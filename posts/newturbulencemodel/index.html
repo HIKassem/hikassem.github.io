@@ -123,6 +123,9 @@
 
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
+<div class="figure">
+<a class="reference external image-reference" href="../../images/template.png"><img alt="/images/template.png" src="../../images/template.png"></a>
+</div>
 <p>In OpenFOAM-3.0.0 <a class="footnote-reference" href="#id11" id="id1">[1]</a>, the turbulence models library had major facelift. Actually, it had major operation not just a facelift. Now, all models are based on one base template class including RANS, LES, incompressible and compressible. Therefore, if you followed most of the available tutorials on how to modify/implement turbulence model, it will not work. You will face many compiler errors from the first step. This post shows how to overcome this problem step-by-step. Moreover, it discusses briefly the reasons causing these errors.</p>
 <!-- TEASER_END: click to read the rest of the article -->
 <div class="section" id="what-is-the-problem">
@@ -133,55 +136,55 @@ If you normally consider a <tt class="docutils literal">class</tt> as a blueprin
 <div class="section" id="previous-versions">
 <h3>Previous versions</h3>
 <p>As you may read in many available tutorials online about how to create a new turbulence model in OpenFOAM, you just have to follow the these steps to create incompressible turbulence model based on <tt class="docutils literal">realizableKE</tt></p>
-<pre class="code console"><a name="rest_code_717541e94a6f4234af82283c431aec41-1"></a><span class="gp">#</span> copy to run directory
-<a name="rest_code_717541e94a6f4234af82283c431aec41-2"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_SRC</span>/turbulenceModels/incompressible/RAS/realizableKE/ .
-<a name="rest_code_717541e94a6f4234af82283c431aec41-3"></a><span class="gp">#</span> rename all files
-<a name="rest_code_717541e94a6f4234af82283c431aec41-4"></a><span class="gp">$</span> mv realizableKE myrealizableKE
-<a name="rest_code_717541e94a6f4234af82283c431aec41-5"></a><span class="gp">$</span> mv myrealizableKE/realizableKE.H myrealizableKE/myrealizableKE.H
-<a name="rest_code_717541e94a6f4234af82283c431aec41-6"></a><span class="gp">$</span> mv myrealizableKE/realizableKE.C myrealizableKE/myrealizableKE.C
-<a name="rest_code_717541e94a6f4234af82283c431aec41-7"></a><span class="gp">#</span> rename all instances of realizableKE to myrealizableKE
-<a name="rest_code_717541e94a6f4234af82283c431aec41-8"></a><span class="gp">#</span> you can use replace all in your text editor
-<a name="rest_code_717541e94a6f4234af82283c431aec41-9"></a><span class="gp">$</span> find myrealizableKE -type f -exec sed -i <span class="s1">'s/realizableKE/myrealizableKE/g'</span> <span class="o">{}</span> <span class="se">\;</span>
+<pre class="code console"><a name="rest_code_928f5ee39d57482c9facdae7a39652fc-1"></a><span class="gp">#</span> copy to run directory
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-2"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_SRC</span>/turbulenceModels/incompressible/RAS/realizableKE/ .
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-3"></a><span class="gp">#</span> rename all files
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-4"></a><span class="gp">$</span> mv realizableKE myrealizableKE
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-5"></a><span class="gp">$</span> mv myrealizableKE/realizableKE.H myrealizableKE/myrealizableKE.H
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-6"></a><span class="gp">$</span> mv myrealizableKE/realizableKE.C myrealizableKE/myrealizableKE.C
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-7"></a><span class="gp">#</span> rename all instances of realizableKE to myrealizableKE
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-8"></a><span class="gp">#</span> you can use replace all in your text editor
+<a name="rest_code_928f5ee39d57482c9facdae7a39652fc-9"></a><span class="gp">$</span> find myrealizableKE -type f -exec sed -i <span class="s1">'s/realizableKE/myrealizableKE/g'</span> <span class="o">{}</span> <span class="se">\;</span>
 </pre>
 <p>Then a Make directory is needed to compile the new mode,</p>
 <p><tt class="docutils literal">Make/files</tt></p>
-<pre class="code console"><a name="rest_code_c81321a2ac2542a380216ab224e15ccf-1"></a><span class="go">myrealizableKE.C</span>
-<a name="rest_code_c81321a2ac2542a380216ab224e15ccf-2"></a>
-<a name="rest_code_c81321a2ac2542a380216ab224e15ccf-3"></a><span class="go">LIB = $(FOAM_USER_LIBBIN)/libmyrealizableKE</span>
+<pre class="code console"><a name="rest_code_0f3a364a18114823809e64eff4a791b0-1"></a><span class="go">myrealizableKE.C</span>
+<a name="rest_code_0f3a364a18114823809e64eff4a791b0-2"></a>
+<a name="rest_code_0f3a364a18114823809e64eff4a791b0-3"></a><span class="go">LIB = $(FOAM_USER_LIBBIN)/libmyrealizableKE</span>
 </pre>
 <p><tt class="docutils literal">Make/options</tt> (you can copy it from <tt class="docutils literal">$FOAM_SRC/turbulenceModels/incompressible/RAS/Make/options</tt> and link it to <tt class="docutils literal">RASModels</tt> library)</p>
-<pre class="code console"><a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-1"></a><span class="go">EXE_INC = \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-2"></a><span class="go">    -I$(LIB_SRC)/turbulenceModels/incompressible/RAS/lnInclude \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-3"></a><span class="go">    -I$(LIB_SRC)/turbulenceModels \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-4"></a><span class="go">    -I$(LIB_SRC)/transportModels \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-5"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-6"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-7"></a>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-8"></a><span class="go">LIB_LIBS = \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-9"></a><span class="go">    -lincompressibleRASModels \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-10"></a><span class="go">    -lincompressibleTurbulenceModel \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-11"></a><span class="go">    -lfiniteVolume \</span>
-<a name="rest_code_0dbdff41d2f94b24848bc25c62c6fac2-12"></a><span class="go">    -lmeshTools</span>
+<pre class="code console"><a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-1"></a><span class="go">EXE_INC = \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-2"></a><span class="go">    -I$(LIB_SRC)/turbulenceModels/incompressible/RAS/lnInclude \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-3"></a><span class="go">    -I$(LIB_SRC)/turbulenceModels \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-4"></a><span class="go">    -I$(LIB_SRC)/transportModels \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-5"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-6"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-7"></a>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-8"></a><span class="go">LIB_LIBS = \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-9"></a><span class="go">    -lincompressibleRASModels \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-10"></a><span class="go">    -lincompressibleTurbulenceModel \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-11"></a><span class="go">    -lfiniteVolume \</span>
+<a name="rest_code_6d4e75b074a64c08a4a6595c3cd3f8e0-12"></a><span class="go">    -lmeshTools</span>
 </pre>
 <p>For compressible flow, it is the same process with minor modifications to <tt class="docutils literal">Make</tt>. That is all you need, just add the new library to <tt class="docutils literal">controlDict</tt> libs and you are ready to go.</p>
 </div>
 <div class="section" id="new-version">
 <h3>New version</h3>
 <p>let's try to apply the same steps using any OpenFOAM version starting from <tt class="docutils literal"><span class="pre">v-3.0.0</span></tt></p>
-<pre class="code console"><a name="rest_code_7d55cccc8e644b6cb1d97cc652abcd8d-1"></a><span class="gp">#</span> note: Diffrent path.
-<a name="rest_code_7d55cccc8e644b6cb1d97cc652abcd8d-2"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_SRC</span>/TurbulenceModels/turbulenceModels/RAS/realizableKE .
+<pre class="code console"><a name="rest_code_ad090601b82a4890a4fd56a4f5b4f7a0-1"></a><span class="gp">#</span> note: Diffrent path.
+<a name="rest_code_ad090601b82a4890a4fd56a4f5b4f7a0-2"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_SRC</span>/TurbulenceModels/turbulenceModels/RAS/realizableKE .
 </pre>
 <p>Then follow the same steps as <a class="reference internal" href="#previous-versions">Previous versions</a>. If you still not sure how to update your case files to <tt class="docutils literal"><span class="pre">v-3.0.0</span></tt>, check this post <a class="footnote-reference" href="#id16" id="id6">[6]</a></p>
 <div class="section" id="first-error">
 <h4>First error</h4>
 <p>If you followed these steps you will get a very long error but actually it is just one repeated error like this one,</p>
-<pre class="code console"><a name="rest_code_d115bf936b974db8a6d4e5f5309d4594-1"></a><span class="gp">myrealizableKE.C:###:##</span>: error: redefinition of <span class="s1">'function name'</span>
-<a name="rest_code_d115bf936b974db8a6d4e5f5309d4594-2"></a><span class="gp">myrealizableKE.C:###:##</span>: note: <span class="s1">'function name'</span> previously declared here
+<pre class="code console"><a name="rest_code_fe97a2829c1f42718cd3627790f234dc-1"></a><span class="gp">myrealizableKE.C:###:##</span>: error: redefinition of <span class="s1">'function name'</span>
+<a name="rest_code_fe97a2829c1f42718cd3627790f234dc-2"></a><span class="gp">myrealizableKE.C:###:##</span>: note: <span class="s1">'function name'</span> previously declared here
 </pre>
 <p>Probably you are familiar with such error. It basically means that the member functions of class <tt class="docutils literal">myrealizableKE</tt> are defined more than once. Indeed the compiler never lies unless it has a bug. The first idea could be tried to over come this error is removing the following three lines in the <tt class="docutils literal">myrealizableKE.H</tt> (<cite>comment them out we will need them later</cite>). You maybe do not understand these lines but <tt class="docutils literal">.C</tt> file included in <tt class="docutils literal">.H</tt> file in <tt class="docutils literal">C++</tt> <cite>looks weird!!</cite></p>
-<pre class="code c++"><a name="rest_code_8d8f35e4520d4740beae89ed8f49bf8f-1"></a><span class="c1">// #ifdef NoRepository</span>
-<a name="rest_code_8d8f35e4520d4740beae89ed8f49bf8f-2"></a><span class="c1">// #   include "myrealizableKE.C"</span>
-<a name="rest_code_8d8f35e4520d4740beae89ed8f49bf8f-3"></a><span class="c1">// #endif</span>
+<pre class="code c++"><a name="rest_code_e63ab950a921416787db4869f05674bb-1"></a><span class="c1">// #ifdef NoRepository</span>
+<a name="rest_code_e63ab950a921416787db4869f05674bb-2"></a><span class="c1">// #   include "myrealizableKE.C"</span>
+<a name="rest_code_e63ab950a921416787db4869f05674bb-3"></a><span class="c1">// #endif</span>
 </pre>
 <p>Now recompile the code, <cite>surprisingly no errors!!</cite></p>
 </div>
@@ -197,143 +200,143 @@ If you normally consider a <tt class="docutils literal">class</tt> as a blueprin
 <div class="section" id="rans-incompressible-models">
 <h3>RANS incompressible models</h3>
 <p>Follow the same steps as described in <a class="reference internal" href="#new-version">New version</a> section but an extra file is needed which you can copy from OpenFOAM source</p>
-<pre class="code console"><a name="rest_code_9763b78d6afa44969594ad45a06ec9d1-1"></a><span class="gp">$</span> cp <span class="nv">$FOAM_SRC</span>/TurbulenceModels/incompressible/turbulentTransportModels/turbulentTransportModels.C makeTurModel.C
+<pre class="code console"><a name="rest_code_61eae416f6e6435996f453620183e113-1"></a><span class="gp">$</span> cp <span class="nv">$FOAM_SRC</span>/TurbulenceModels/incompressible/turbulentTransportModels/turbulentTransportModels.C makeTurModel.C
 </pre>
 <p>In simple words, this file has two tasks. The first task this file will do is inislize the template class <a class="footnote-reference" href="#id18" id="id8">[8]</a> <a class="footnote-reference" href="#id19" id="id9">[9]</a>. The second task is adding the new model to the run time selection table.</p>
 <p>Edit <tt class="docutils literal">makeTurModel.C</tt> (Please note this file is based on <a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/TurbulenceModels/incompressible/turbulentTransportModels/turbulentTransportModels.C">turbulentTransportModels.C</a> and <a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/TurbulenceModels/turbulenceModels/makeTurbulenceModel.H">makeTurbulenceModel.H</a>)</p>
-<pre class="code c++"><a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-1"></a> <span class="cp">#include</span> <span class="cpf">"IncompressibleTurbulenceModel.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-2"></a> <span class="cp">#include</span> <span class="cpf">"transportModel.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-3"></a> <span class="cp">#include</span> <span class="cpf">"addToRunTimeSelectionTable.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-4"></a> <span class="cp">#include</span> <span class="cpf">"makeTurbulenceModel.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-5"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-6"></a> <span class="cp">#include</span> <span class="cpf">"laminar.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-7"></a> <span class="cp">#include</span> <span class="cpf">"RASModel.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-8"></a> <span class="cp">#include</span> <span class="cpf">"LESModel.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-9"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-10"></a> <span class="c1">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-11"></a> <span class="cp">#define createBaseTurbulenceModel(Alpha, Rho, baseModel, BaseModel, Transport) \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-12"></a><span class="cp">                                                                                \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-13"></a><span class="cp">     namespace Foam                                                             \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-14"></a><span class="cp">     {                                                                          \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-15"></a><span class="cp">         typedef BaseModel&lt;Transport&gt; Transport##BaseModel;                     \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-16"></a><span class="cp">         typedef RASModel&lt;Transport##BaseModel&gt; RAS##Transport##BaseModel;      \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-17"></a><span class="cp">         typedef LESModel&lt;Transport##BaseModel&gt; LES##Transport##BaseModel;      \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-18"></a><span class="cp">     }</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-19"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-20"></a> <span class="n">createBaseTurbulenceModel</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-21"></a> <span class="p">(</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-22"></a>     <span class="n">geometricOneField</span><span class="p">,</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-23"></a>     <span class="n">geometricOneField</span><span class="p">,</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-24"></a>     <span class="n">incompressibleTurbulenceModel</span><span class="p">,</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-25"></a>     <span class="n">IncompressibleTurbulenceModel</span><span class="p">,</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-26"></a>     <span class="n">transportModel</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-27"></a> <span class="p">);</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-28"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-29"></a> <span class="cp">#define makeRASModel(Type)                                                     \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-30"></a><span class="cp">     makeTemplatedTurbulenceModel                                               \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-31"></a><span class="cp">     (transportModelIncompressibleTurbulenceModel, RAS, Type)</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-32"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-33"></a> <span class="cp">#define makeLESModel(Type)                                                     \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-34"></a><span class="cp">     makeTemplatedTurbulenceModel                                               \</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-35"></a><span class="cp">     (transportModelIncompressibleTurbulenceModel, LES, Type)</span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-36"></a>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-37"></a><span class="cp">#include</span> <span class="cpf">"myrealizableKE.H"</span><span class="cp"></span>
-<a name="rest_code_845a3b5f95a54ede9dd43dc44107f175-38"></a><span class="n">makeRASModel</span><span class="p">(</span><span class="n">myrealizableKE</span><span class="p">);</span>
+<pre class="code c++"><a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-1"></a> <span class="cp">#include</span> <span class="cpf">"IncompressibleTurbulenceModel.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-2"></a> <span class="cp">#include</span> <span class="cpf">"transportModel.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-3"></a> <span class="cp">#include</span> <span class="cpf">"addToRunTimeSelectionTable.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-4"></a> <span class="cp">#include</span> <span class="cpf">"makeTurbulenceModel.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-5"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-6"></a> <span class="cp">#include</span> <span class="cpf">"laminar.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-7"></a> <span class="cp">#include</span> <span class="cpf">"RASModel.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-8"></a> <span class="cp">#include</span> <span class="cpf">"LESModel.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-9"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-10"></a> <span class="c1">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-11"></a> <span class="cp">#define createBaseTurbulenceModel(Alpha, Rho, baseModel, BaseModel, Transport) \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-12"></a><span class="cp">                                                                                \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-13"></a><span class="cp">     namespace Foam                                                             \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-14"></a><span class="cp">     {                                                                          \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-15"></a><span class="cp">         typedef BaseModel&lt;Transport&gt; Transport##BaseModel;                     \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-16"></a><span class="cp">         typedef RASModel&lt;Transport##BaseModel&gt; RAS##Transport##BaseModel;      \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-17"></a><span class="cp">         typedef LESModel&lt;Transport##BaseModel&gt; LES##Transport##BaseModel;      \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-18"></a><span class="cp">     }</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-19"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-20"></a> <span class="n">createBaseTurbulenceModel</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-21"></a> <span class="p">(</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-22"></a>     <span class="n">geometricOneField</span><span class="p">,</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-23"></a>     <span class="n">geometricOneField</span><span class="p">,</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-24"></a>     <span class="n">incompressibleTurbulenceModel</span><span class="p">,</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-25"></a>     <span class="n">IncompressibleTurbulenceModel</span><span class="p">,</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-26"></a>     <span class="n">transportModel</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-27"></a> <span class="p">);</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-28"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-29"></a> <span class="cp">#define makeRASModel(Type)                                                     \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-30"></a><span class="cp">     makeTemplatedTurbulenceModel                                               \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-31"></a><span class="cp">     (transportModelIncompressibleTurbulenceModel, RAS, Type)</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-32"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-33"></a> <span class="cp">#define makeLESModel(Type)                                                     \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-34"></a><span class="cp">     makeTemplatedTurbulenceModel                                               \</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-35"></a><span class="cp">     (transportModelIncompressibleTurbulenceModel, LES, Type)</span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-36"></a>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-37"></a><span class="cp">#include</span> <span class="cpf">"myrealizableKE.H"</span><span class="cp"></span>
+<a name="rest_code_454b14ddca034029b4c27da7ea67fcc3-38"></a><span class="n">makeRASModel</span><span class="p">(</span><span class="n">myrealizableKE</span><span class="p">);</span>
 </pre>
 <p>Also modify <tt class="docutils literal">files</tt> to compile <tt class="docutils literal">makeTurModel.C</tt></p>
-<pre class="code console"><a name="rest_code_708d6fdffd6e4d6381844dbc806a6204-1"></a><span class="go">makeTurModel.C</span>
-<a name="rest_code_708d6fdffd6e4d6381844dbc806a6204-2"></a>
-<a name="rest_code_708d6fdffd6e4d6381844dbc806a6204-3"></a><span class="go">LIB = $(FOAM_USER_LIBBIN)/libmyrealizableKE</span>
+<pre class="code console"><a name="rest_code_8c4bd77a50fe4d298f8e3673f1fbda94-1"></a><span class="go">makeTurModel.C</span>
+<a name="rest_code_8c4bd77a50fe4d298f8e3673f1fbda94-2"></a>
+<a name="rest_code_8c4bd77a50fe4d298f8e3673f1fbda94-3"></a><span class="go">LIB = $(FOAM_USER_LIBBIN)/libmyrealizableKE</span>
 </pre>
 <p>Finally <tt class="docutils literal">options</tt></p>
-<pre class="code console"><a name="rest_code_68fe737a186c44999d365cecafca9d86-1"></a><span class="go">EXE_INC = \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-2"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-3"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/incompressible/lnInclude \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-4"></a><span class="go">    -I$(LIB_SRC)/transportModels/incompressible/lnInclude \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-5"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-6"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-7"></a>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-8"></a><span class="go">LIB_LIBS = \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-9"></a><span class="go">    -lturbulenceModels \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-10"></a><span class="go">    -lincompressibleTurbulenceModels \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-11"></a><span class="go">    -lincompressibleTransportModels \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-12"></a><span class="go">    -lfiniteVolume \</span>
-<a name="rest_code_68fe737a186c44999d365cecafca9d86-13"></a><span class="go">    -lmeshTools</span>
+<pre class="code console"><a name="rest_code_b504ad277da8481a99c100a259ba5399-1"></a><span class="go">EXE_INC = \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-2"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-3"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/incompressible/lnInclude \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-4"></a><span class="go">    -I$(LIB_SRC)/transportModels/incompressible/lnInclude \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-5"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-6"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-7"></a>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-8"></a><span class="go">LIB_LIBS = \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-9"></a><span class="go">    -lturbulenceModels \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-10"></a><span class="go">    -lincompressibleTurbulenceModels \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-11"></a><span class="go">    -lincompressibleTransportModels \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-12"></a><span class="go">    -lfiniteVolume \</span>
+<a name="rest_code_b504ad277da8481a99c100a259ba5399-13"></a><span class="go">    -lmeshTools</span>
 </pre>
 </div>
 <div class="section" id="rans-compressible-models">
 <h3>RANS compressible models</h3>
 <p>Here you can see a glimpse of the beauty of <tt class="docutils literal">template</tt> classes in <tt class="docutils literal">C++</tt> <cite>(You do not have to agree with me on this!)</cite>. The same source files <tt class="docutils literal">myrealizableKE.H</tt> and <tt class="docutils literal">myrealizableKE.C</tt> can be used to compile the same model but for compressible flow. Only <tt class="docutils literal">makeTurModel.C</tt> and <tt class="docutils literal">Make</tt> need to be modified as follows, (Please note this file is based on <a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/TurbulenceModels/compressible/turbulentFluidThermoModels/turbulentFluidThermoModels.C">turbulentFluidThermoModels.C</a> and <a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/TurbulenceModels/compressible/turbulentFluidThermoModels/makeTurbulenceModel.H">compressible/makeTurbulenceModel.H</a>)</p>
-<pre class="code c++"><a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-1"></a><span class="cp">#include</span> <span class="cpf">"CompressibleTurbulenceModel.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-2"></a><span class="cp">#include</span> <span class="cpf">"compressibleTransportModel.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-3"></a><span class="cp">#include</span> <span class="cpf">"fluidThermo.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-4"></a><span class="cp">#include</span> <span class="cpf">"addToRunTimeSelectionTable.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-5"></a><span class="cp">#include</span> <span class="cpf">"makeTurbulenceModel.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-6"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-7"></a><span class="cp">#include</span> <span class="cpf">"ThermalDiffusivity.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-8"></a><span class="cp">#include</span> <span class="cpf">"EddyDiffusivity.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-9"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-10"></a><span class="cp">#include</span> <span class="cpf">"laminar.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-11"></a><span class="cp">#include</span> <span class="cpf">"RASModel.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-12"></a><span class="cp">#include</span> <span class="cpf">"LESModel.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-13"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-14"></a><span class="c1">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-15"></a><span class="cp">#define createBaseTurbulenceModel(                                             \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-16"></a><span class="cp">    Alpha, Rho, baseModel, BaseModel, TDModel, Transport)                      \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-17"></a><span class="cp">                                                                               \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-18"></a><span class="cp">    namespace Foam                                                             \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-19"></a><span class="cp">    {                                                                          \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-20"></a><span class="cp">        typedef TDModel&lt;BaseModel&lt;Transport&gt;&gt;                                  \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-21"></a><span class="cp">            Transport##BaseModel;                                              \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-22"></a><span class="cp">        typedef RASModel&lt;EddyDiffusivity&lt;Transport##BaseModel&gt;&gt;                \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-23"></a><span class="cp">            RAS##Transport##BaseModel;                                         \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-24"></a><span class="cp">        typedef LESModel&lt;EddyDiffusivity&lt;Transport##BaseModel&gt;&gt;                \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-25"></a><span class="cp">            LES##Transport##BaseModel;                                         \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-26"></a><span class="cp">    }</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-27"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-28"></a><span class="n">createBaseTurbulenceModel</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-29"></a><span class="p">(</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-30"></a>    <span class="n">geometricOneField</span><span class="p">,</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-31"></a>    <span class="n">volScalarField</span><span class="p">,</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-32"></a>    <span class="n">compressibleTurbulenceModel</span><span class="p">,</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-33"></a>    <span class="n">CompressibleTurbulenceModel</span><span class="p">,</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-34"></a>    <span class="n">ThermalDiffusivity</span><span class="p">,</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-35"></a>    <span class="n">fluidThermo</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-36"></a><span class="p">);</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-37"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-38"></a><span class="cp">#define makeRASModel(Type)                                                     \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-39"></a><span class="cp">    makeTemplatedTurbulenceModel                                               \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-40"></a><span class="cp">    (fluidThermoCompressibleTurbulenceModel, RAS, Type)</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-41"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-42"></a><span class="cp">#define makeLESModel(Type)                                                     \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-43"></a><span class="cp">    makeTemplatedTurbulenceModel                                               \</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-44"></a><span class="cp">    (fluidThermoCompressibleTurbulenceModel, LES, Type)</span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-45"></a>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-46"></a><span class="cp">#include</span> <span class="cpf">"myrealizableKE.H"</span><span class="cp"></span>
-<a name="rest_code_3f6c37b58d3a47b3b86da5931c54a710-47"></a><span class="n">makeRASModel</span><span class="p">(</span><span class="n">myrealizableKE</span><span class="p">);</span>
+<pre class="code c++"><a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-1"></a><span class="cp">#include</span> <span class="cpf">"CompressibleTurbulenceModel.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-2"></a><span class="cp">#include</span> <span class="cpf">"compressibleTransportModel.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-3"></a><span class="cp">#include</span> <span class="cpf">"fluidThermo.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-4"></a><span class="cp">#include</span> <span class="cpf">"addToRunTimeSelectionTable.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-5"></a><span class="cp">#include</span> <span class="cpf">"makeTurbulenceModel.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-6"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-7"></a><span class="cp">#include</span> <span class="cpf">"ThermalDiffusivity.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-8"></a><span class="cp">#include</span> <span class="cpf">"EddyDiffusivity.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-9"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-10"></a><span class="cp">#include</span> <span class="cpf">"laminar.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-11"></a><span class="cp">#include</span> <span class="cpf">"RASModel.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-12"></a><span class="cp">#include</span> <span class="cpf">"LESModel.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-13"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-14"></a><span class="c1">// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-15"></a><span class="cp">#define createBaseTurbulenceModel(                                             \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-16"></a><span class="cp">    Alpha, Rho, baseModel, BaseModel, TDModel, Transport)                      \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-17"></a><span class="cp">                                                                               \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-18"></a><span class="cp">    namespace Foam                                                             \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-19"></a><span class="cp">    {                                                                          \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-20"></a><span class="cp">        typedef TDModel&lt;BaseModel&lt;Transport&gt;&gt;                                  \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-21"></a><span class="cp">            Transport##BaseModel;                                              \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-22"></a><span class="cp">        typedef RASModel&lt;EddyDiffusivity&lt;Transport##BaseModel&gt;&gt;                \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-23"></a><span class="cp">            RAS##Transport##BaseModel;                                         \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-24"></a><span class="cp">        typedef LESModel&lt;EddyDiffusivity&lt;Transport##BaseModel&gt;&gt;                \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-25"></a><span class="cp">            LES##Transport##BaseModel;                                         \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-26"></a><span class="cp">    }</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-27"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-28"></a><span class="n">createBaseTurbulenceModel</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-29"></a><span class="p">(</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-30"></a>    <span class="n">geometricOneField</span><span class="p">,</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-31"></a>    <span class="n">volScalarField</span><span class="p">,</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-32"></a>    <span class="n">compressibleTurbulenceModel</span><span class="p">,</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-33"></a>    <span class="n">CompressibleTurbulenceModel</span><span class="p">,</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-34"></a>    <span class="n">ThermalDiffusivity</span><span class="p">,</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-35"></a>    <span class="n">fluidThermo</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-36"></a><span class="p">);</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-37"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-38"></a><span class="cp">#define makeRASModel(Type)                                                     \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-39"></a><span class="cp">    makeTemplatedTurbulenceModel                                               \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-40"></a><span class="cp">    (fluidThermoCompressibleTurbulenceModel, RAS, Type)</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-41"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-42"></a><span class="cp">#define makeLESModel(Type)                                                     \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-43"></a><span class="cp">    makeTemplatedTurbulenceModel                                               \</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-44"></a><span class="cp">    (fluidThermoCompressibleTurbulenceModel, LES, Type)</span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-45"></a>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-46"></a><span class="cp">#include</span> <span class="cpf">"myrealizableKE.H"</span><span class="cp"></span>
+<a name="rest_code_a02b5a103a904ad9a42f8cfef61930c1-47"></a><span class="n">makeRASModel</span><span class="p">(</span><span class="n">myrealizableKE</span><span class="p">);</span>
 </pre>
 <p>In <tt class="docutils literal">files</tt> just change the name of the compiled dynamic library and change <tt class="docutils literal">options</tt> to</p>
-<pre class="code console"><a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-1"></a><span class="go">EXE_INC = \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-2"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/compressible/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-3"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-4"></a><span class="go">    -I$(LIB_SRC)/transportModels/compressible/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-5"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-6"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-7"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/solidThermo/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-8"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/solidSpecie/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-9"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-10"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-11"></a>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-12"></a><span class="go">LIB_LIBS = \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-13"></a><span class="go">    -lcompressibleTurbulenceModels \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-14"></a><span class="go">    -lcompressibleTransportModels \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-15"></a><span class="go">    -lfluidThermophysicalModels \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-16"></a><span class="go">    -lsolidThermo \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-17"></a><span class="go">    -lsolidSpecie \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-18"></a><span class="go">    -lturbulenceModels \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-19"></a><span class="go">    -lspecie \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-20"></a><span class="go">    -lfiniteVolume \</span>
-<a name="rest_code_eb7cd353eb9d4f19852ac5b5e7b5173e-21"></a><span class="go">    -lmeshTools</span>
+<pre class="code console"><a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-1"></a><span class="go">EXE_INC = \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-2"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/compressible/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-3"></a><span class="go">    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-4"></a><span class="go">    -I$(LIB_SRC)/transportModels/compressible/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-5"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-6"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-7"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/solidThermo/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-8"></a><span class="go">    -I$(LIB_SRC)/thermophysicalModels/solidSpecie/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-9"></a><span class="go">    -I$(LIB_SRC)/finiteVolume/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-10"></a><span class="go">    -I$(LIB_SRC)/meshTools/lnInclude \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-11"></a>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-12"></a><span class="go">LIB_LIBS = \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-13"></a><span class="go">    -lcompressibleTurbulenceModels \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-14"></a><span class="go">    -lcompressibleTransportModels \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-15"></a><span class="go">    -lfluidThermophysicalModels \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-16"></a><span class="go">    -lsolidThermo \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-17"></a><span class="go">    -lsolidSpecie \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-18"></a><span class="go">    -lturbulenceModels \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-19"></a><span class="go">    -lspecie \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-20"></a><span class="go">    -lfiniteVolume \</span>
+<a name="rest_code_e824f8eaa69c4c7bafe47ddf7d65a64e-21"></a><span class="go">    -lmeshTools</span>
 </pre>
 <p>The order of first two links in <tt class="docutils literal">EXE_INC</tt> is <cite>essential</cite>.</p>
 </div>
