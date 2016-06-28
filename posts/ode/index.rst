@@ -6,6 +6,7 @@
 .. link:
 .. description:
 .. type: text
+.. previewimage: /images/results.png
 
 
 .. How to solve ODE in OpenFOAM
@@ -35,48 +36,48 @@ a system of first order ODEs. This process of order reduction produces a number
 of ODEs equal to the order of the original ODE. Here, the reduction process as
 described by Ferziger [#]_ for general high order ODE,
 
-.. math::
+    .. math::
 
-    y^n = f(x,y,y',\cdots y^{n-1})
+        y^n = f(x,y,y',\cdots y^{n-1})
 
 where :math:`n` is the order. Then it can be redefined as (transformation),
 
-.. math::
 
-    y_1 &= y \\
-    y_j &= y^{j-1} \quad j=1,2,\cdots n-1
+    .. math::
+
+        y_1 &= y \\
+        y_j &= y^{j-1} \quad j=1,2,\cdots n-1
 
 Finally, the system could be represented as (differentiation),
 
-.. math::
+    .. math::
 
-    y'_j &= y_j+1 \quad j=1,2,\cdots n-1\\
-    y'_n &= f(x,y_1,y_2,\cdots y_n)
+        f_j = y'_j &= y_{j+1} \quad j=1,2,\cdots n-1\\
+        f_n = y'_n &= f(x,y_1,y_2,\cdots y_n)
 
 As described above, the process could be summarised into two steps; a
 transformation of variables and differentiation. In OpenFOAM, there is an extra
 step required for stiff system solvers only. These solvers require the jacobian
 matrix and the time partial derivatives.
 
-.. math::
+    .. math::
 
-    J =
-    \begin{bmatrix}
-    \frac{\partial f_1}{\partial y_1} & \frac{\partial f_1}{\partial y_2} &
-    \cdots &\frac{\partial f_1}{\partial y_n}\\
-    \frac{\partial f_2}{\partial y_1} & \frac{\partial f_2}{\partial y_2} &
-    \cdots &\frac{\partial f_2}{\partial y_n}\\
-    \vdots & \vdots & \ddots & \vdots \\
-    \frac{\partial f_n}{\partial y_1} & \cdots & \cdots
-    &\frac{\partial f_n}{\partial y_n}
-    \end{bmatrix}
+        J =
+        \begin{bmatrix}
+        \frac{\partial f_1}{\partial y_1} & \frac{\partial f_1}{\partial y_2} &
+        \cdots &\frac{\partial f_1}{\partial y_n}\\
+        \frac{\partial f_2}{\partial y_1} & \frac{\partial f_2}{\partial y_2} &
+        \cdots &\frac{\partial f_2}{\partial y_n}\\
+        \vdots & \vdots & \ddots & \vdots \\
+        \frac{\partial f_n}{\partial y_1} & \cdots & \cdots
+        &\frac{\partial f_n}{\partial y_n}
+        \end{bmatrix}
 
-Where :math:`f_n` is the equation :math:`n` in the reduced system. Also the
-time partial derivatives are required,
+Where :math:`f_n` is the equation :math:`n` in the reduced system. Also the partial derivative with respect to :math:`x` (independent variable)
 
-.. math::
+    .. math::
 
-    \frac{\partial f_1}{\partial t} \cdots \frac{\partial f_n}{\partial t}
+        \frac{\partial f_1}{\partial x} \cdots \frac{\partial f_n}{\partial x}
 
 Equation of motion
 -------------------
@@ -84,36 +85,36 @@ Equation of motion
 The equation of motion of single degree of freedom system (simple mass-spring
 system) , which is a second order ODE, will be used here as an example.
 
-.. math::
+    .. math::
 
-    m\ddot{x} + kx &= 0 \\
-    \ddot{x} &= -\frac{k}{m}x
+        m\ddot{q} + kq &= 0 \\
+        \ddot{q} &= -\frac{k}{m}q
 
-where :math:`m` is the mass, :math:`k` is the stiffness and :math:`x` is the
+where :math:`m` is the mass, :math:`k` is the stiffness and :math:`q` is the
 displacement.
 
 This equation has an exact solution represents the harmonic oscillation of the
 system as (assuming zero initial velocity);
 
-.. math::
+    .. math::
 
-    x = x_0 \cos(\omega t)
+        q = q_0 \cos(\omega t)
 
-where :math:`x_0` is the initial displacement and :math:`\omega` is the natural
+where :math:`q_0` is the initial displacement and :math:`\omega` is the natural
 frequency of the system :math:`\omega=\sqrt{k/m}`.
 
 
 It is the time to apply the methodology described in the previous section (`Mathematical background`_) on the
 equation of motion.
 
-- `Step A`_: Transformation from :math:`x` to :math:`y`
+- `Step A`_: Transformation from :math:`q` to :math:`y`
 
     .. _Step A:
 
     .. math::
 
-        y_1 &= x \\
-        y_2 &= \dot{x}
+        y_1 &= q \\
+        y_2 &= \dot{q}
 
 - `Step B`_: Differentiation (substitute first)
 
@@ -121,14 +122,16 @@ equation of motion.
 
     .. math::
 
-        \ddot{x} = -\frac{k}{m}y_1
+        \ddot{q} = -\frac{k}{m}y_1
 
     then,
 
     .. math::
 
-        \dot{y_1} &= \dot{x} = y_2\\
-        \dot{y_2} &= \ddot{x} = -\frac{k}{m}y_1
+        f_1 = \dot{y_1} &= \dot{q} \\
+                        &= y_2\\
+        f_2 = \dot{y_2} &= \ddot{q} \\
+                        &= -\frac{k}{m}y_1
 
 - `Step C`_: Jacobian (optional)
 
@@ -145,7 +148,7 @@ equation of motion.
         -k/m & 0
         \end{bmatrix}
 
-    and time derivatives,
+    and time derivatives (independent variable in this case),
 
     .. math::
 
@@ -370,9 +373,9 @@ As mentioned before (`Equation of motion`_), this ODE has an exact solution.
 It is basically a harmonic oscillation which could be represented as
 (after applying the initial conditions and system properties),
 
-.. math::
+    .. math::
 
-    x(t) = 0.2 \cos(32t)
+        q(t) = 0.2 \cos(32t)
 
 A quick and easy way to compare the results is by using gnuplot to visualise
 the results.
@@ -416,7 +419,8 @@ it can be used with different input argument.
 
 .. class:: alert alert-info
 
-    Update: 23 June 2016, scalar type added to myODE constructor as pointed out by Mohamed Ouda 
+    - Update: 23 June 2016, scalar type added to myODE constructor as pointed out by Mohamed Ouda
+    - Update: 28 June 2016, variables names are revised to be consistent and more clear according to Francisco Angel comments
 
 .. [#]  OpenFOAM® and OpenCFD® are registered trademarks of OpenCFD Limited,
         the producer OpenFOAM software. All registered trademarks are property
