@@ -303,13 +303,13 @@ point. Fortunately, there is a small test program included in OpenFOAM source
 files. It is described in details in <a class="footnote-reference" href="#id8" id="id3">[3]</a>. So copy it to your
 run directory then compile and run it. (<tt class="docutils literal">RKCK45</tt> is one of OpenFOAM ODE
 solvers).</p>
-<pre class="code console"><a name="rest_code_e08d411c6cbe4240892ff487d85b5b5c-1"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_APP</span>/test/ODE .
-<a name="rest_code_e08d411c6cbe4240892ff487d85b5b5c-2"></a><span class="gp">$</span> wmake
-<a name="rest_code_e08d411c6cbe4240892ff487d85b5b5c-3"></a><span class="gp">$</span> Test-ODE RKCK45
+<pre class="code console"><a name="rest_code_d37f74d3be274688b6eaa05a86e8a8b8-1"></a><span class="gp">$</span> cp -r <span class="nv">$FOAM_APP</span>/test/ODE .
+<a name="rest_code_d37f74d3be274688b6eaa05a86e8a8b8-2"></a><span class="gp">$</span> wmake
+<a name="rest_code_d37f74d3be274688b6eaa05a86e8a8b8-3"></a><span class="gp">$</span> Test-ODE RKCK45
 </pre>
 <p>You should get a lot of numbers on the screen and finally you should see;</p>
-<pre class="code console"><a name="rest_code_dfe697f662db4838a55126aecca5836f-1"></a><span class="go">Analytical: y(2.0) = 4(0.223891 0.576725 0.352834 0.128943)</span>
-<a name="rest_code_dfe697f662db4838a55126aecca5836f-2"></a><span class="go">Numerical:  y(2.0) = 4(0.223891 0.576725 0.352835 0.128943), dxEst = 0.402302</span>
+<pre class="code console"><a name="rest_code_74bbdf39c2ae47ee8f48fb5128c494fc-1"></a><span class="go">Analytical: y(2.0) = 4(0.223891 0.576725 0.352834 0.128943)</span>
+<a name="rest_code_74bbdf39c2ae47ee8f48fb5128c494fc-2"></a><span class="go">Numerical:  y(2.0) = 4(0.223891 0.576725 0.352835 0.128943), dxEst = 0.402302</span>
 </pre>
 <p class="alert alert-info">Please note that since OpenFOAM-2.3 version, the ordinary differential equation
 solvers have been updated <a class="footnote-reference" href="#id9" id="id4">[4]</a>. Therefore Zongyuan <a class="footnote-reference" href="#id8" id="id5">[3]</a> report has some
@@ -334,65 +334,65 @@ divided into two parts, the first part is the definitionn of class called
 abstract class <tt class="docutils literal">ODEsystem</tt>. Let's modify it to represent our equation. Before we
 start just rename it myODE. Also, modify the class constructor to allow passing
 <span class="math">\(m\)</span> and <span class="math">\(k\)</span> values from the main application.</p>
-<pre class="code c++"><a name="rest_code_babdb11f31304c20947321edcb9e11ef-1"></a><span class="k">class</span> <span class="nc">myODE</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-2"></a><span class="o">:</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-3"></a><span class="k">public</span> <span class="n">ODESystem</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-4"></a><span class="p">{</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-5"></a>    <span class="c1">//- Mass of the system</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-6"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">m_</span><span class="p">;</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-7"></a>    <span class="c1">//- Stiffness of the system</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">k_</span><span class="p">;</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-9"></a>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-10"></a>    <span class="k">public</span><span class="o">:</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-11"></a>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-12"></a>    <span class="n">myODE</span><span class="p">(</span><span class="k">const</span> <span class="n">scalar</span><span class="o">&amp;</span> <span class="n">mass</span><span class="p">,</span> <span class="k">const</span> <span class="n">scalar</span><span class="o">&amp;</span> <span class="n">stiffness</span><span class="p">)</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-13"></a>    <span class="o">:</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-14"></a>    <span class="n">ODESystem</span><span class="p">(),</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-15"></a>    <span class="n">m_</span><span class="p">(</span><span class="n">mass</span><span class="p">),</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-16"></a>    <span class="n">k_</span><span class="p">(</span><span class="n">stiffness</span><span class="p">)</span>
-<a name="rest_code_babdb11f31304c20947321edcb9e11ef-17"></a><span class="p">{}</span>
+<pre class="code c++"><a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-1"></a><span class="k">class</span> <span class="nc">myODE</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-2"></a><span class="o">:</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-3"></a><span class="k">public</span> <span class="n">ODESystem</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-4"></a><span class="p">{</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-5"></a>    <span class="c1">//- Mass of the system</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-6"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">m_</span><span class="p">;</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-7"></a>    <span class="c1">//- Stiffness of the system</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">k_</span><span class="p">;</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-9"></a>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-10"></a>    <span class="k">public</span><span class="o">:</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-11"></a>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-12"></a>    <span class="n">myODE</span><span class="p">(</span><span class="k">const</span> <span class="n">scalar</span><span class="o">&amp;</span> <span class="n">mass</span><span class="p">,</span> <span class="k">const</span> <span class="n">scalar</span><span class="o">&amp;</span> <span class="n">stiffness</span><span class="p">)</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-13"></a>    <span class="o">:</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-14"></a>    <span class="n">ODESystem</span><span class="p">(),</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-15"></a>    <span class="n">m_</span><span class="p">(</span><span class="n">mass</span><span class="p">),</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-16"></a>    <span class="n">k_</span><span class="p">(</span><span class="n">stiffness</span><span class="p">)</span>
+<a name="rest_code_f5e4334b7b4c4d738a0a350d17311f0b-17"></a><span class="p">{}</span>
 </pre>
 <p>This class has only three functions, namely, <tt class="docutils literal">nEqns</tt>,
 <tt class="docutils literal">derivatives</tt> and <tt class="docutils literal">jacobian</tt>. <tt class="docutils literal">nEqns</tt> represents the number of equation of this
 system which is essentially the order of the original equation (for this case
 is <span class="math">\(2\)</span>).</p>
-<pre class="code c++"><a name="rest_code_79bd528d4f924f509e1665a66111ac56-1"></a><span class="n">label</span> <span class="nf">nEqns</span><span class="p">()</span> <span class="k">const</span>
-<a name="rest_code_79bd528d4f924f509e1665a66111ac56-2"></a><span class="p">{</span>
-<a name="rest_code_79bd528d4f924f509e1665a66111ac56-3"></a>    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
-<a name="rest_code_79bd528d4f924f509e1665a66111ac56-4"></a><span class="p">}</span>
+<pre class="code c++"><a name="rest_code_9f704f6d6fc2457dbbf2b58f67c3ab1b-1"></a><span class="n">label</span> <span class="nf">nEqns</span><span class="p">()</span> <span class="k">const</span>
+<a name="rest_code_9f704f6d6fc2457dbbf2b58f67c3ab1b-2"></a><span class="p">{</span>
+<a name="rest_code_9f704f6d6fc2457dbbf2b58f67c3ab1b-3"></a>    <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+<a name="rest_code_9f704f6d6fc2457dbbf2b58f67c3ab1b-4"></a><span class="p">}</span>
 </pre>
 <p>The second function is <tt class="docutils literal">derivatives</tt> which is the definition of the system of
 the first order ODEs (<a class="reference internal" href="#step-b">Step B</a>);</p>
-<pre class="code c++"><a name="rest_code_9ce289b462544e4d8614419152ebafcd-1"></a><span class="kt">void</span> <span class="nf">derivatives</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-2"></a><span class="p">(</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dydx</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-6"></a><span class="p">)</span> <span class="k">const</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-7"></a><span class="p">{</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-8"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-9"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<a name="rest_code_9ce289b462544e4d8614419152ebafcd-10"></a><span class="p">}</span>
+<pre class="code c++"><a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-1"></a><span class="kt">void</span> <span class="nf">derivatives</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-2"></a><span class="p">(</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dydx</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-6"></a><span class="p">)</span> <span class="k">const</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-7"></a><span class="p">{</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-8"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-9"></a>    <span class="n">dydx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a name="rest_code_541c0e88bcfa451a8acd0ca028c68a2a-10"></a><span class="p">}</span>
 </pre>
 <p>The third and final function in this class is <tt class="docutils literal">jacobian</tt> and it represents the
 jacobian matrix (<a class="reference internal" href="#step-c">Step C</a>) and the time derivatives of the system.</p>
-<pre class="code c++"><a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-1"></a><span class="kt">void</span> <span class="nf">jacobian</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-2"></a><span class="p">(</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dfdx</span><span class="p">,</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-6"></a>    <span class="n">scalarSquareMatrix</span><span class="o">&amp;</span> <span class="n">dfdy</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-7"></a><span class="p">)</span> <span class="k">const</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-8"></a><span class="p">{</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-9"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-10"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-11"></a>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-12"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-13"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-14"></a>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-15"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">);</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-16"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<a name="rest_code_ee04c6a5d4c0411ea7805f24ca93baf2-17"></a><span class="p">}</span>
+<pre class="code c++"><a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-1"></a><span class="kt">void</span> <span class="nf">jacobian</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-2"></a><span class="p">(</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-3"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">x</span><span class="p">,</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-4"></a>    <span class="k">const</span> <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">y</span><span class="p">,</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-5"></a>    <span class="n">scalarField</span><span class="o">&amp;</span> <span class="n">dfdx</span><span class="p">,</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-6"></a>    <span class="n">scalarSquareMatrix</span><span class="o">&amp;</span> <span class="n">dfdy</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-7"></a><span class="p">)</span> <span class="k">const</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-8"></a><span class="p">{</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-9"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-10"></a>    <span class="n">dfdx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-11"></a>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-12"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-13"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-14"></a>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-15"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k_</span><span class="o">/</span><span class="n">m_</span><span class="o">+</span><span class="n">VSMALL</span><span class="p">);</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-16"></a>    <span class="n">dfdy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_6a51bbaddb9f4903be283d3ce22422bc-17"></a><span class="p">}</span>
 </pre>
 </div>
 <div class="section" id="main-program">
@@ -408,120 +408,120 @@ conditions. In our case and according to (<a class="reference internal" href="#s
 the system initial displacement and velocity. The second function of <tt class="docutils literal">yStart</tt>
 is storing the output results of the ODEsolver.</p>
 <table class="codetable"><tr>
-<td class="linenos"><div class="linenodiv"><pre><a href="#rest_code_264ee40db3f04e87bd94760642d188e4-1"> 1</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-2"> 2</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-3"> 3</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-4"> 4</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-5"> 5</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-6"> 6</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-7"> 7</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-8"> 8</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-9"> 9</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-10">10</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-11">11</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-12">12</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-13">13</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-14">14</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-15">15</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-16">16</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-17">17</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-18">18</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-19">19</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-20">20</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-21">21</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-22">22</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-23">23</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-24">24</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-25">25</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-26">26</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-27">27</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-28">28</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-29">29</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-30">30</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-31">31</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-32">32</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-33">33</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-34">34</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-35">35</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-36">36</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-37">37</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-38">38</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-39">39</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-40">40</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-41">41</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-42">42</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-43">43</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-44">44</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-45">45</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-46">46</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-47">47</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-48">48</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-49">49</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-50">50</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-51">51</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-52">52</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-53">53</a>
-<a href="#rest_code_264ee40db3f04e87bd94760642d188e4-54">54</a></pre></div></td>
-<td class="code"><pre class="code c++"><a name="rest_code_264ee40db3f04e87bd94760642d188e4-1"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-2"></a><span class="p">{</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-3"></a>    <span class="n">argList</span><span class="o">::</span><span class="n">validArgs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"ODESolver"</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-4"></a>    <span class="n">argList</span> <span class="n">args</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-5"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-6"></a>    <span class="c1">// system properties (mass and stiffness)</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-7"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">mass</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="c1">// Kg</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">stiff</span> <span class="o">=</span> <span class="mf">2048.0</span><span class="p">;</span> <span class="c1">// N/m</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-9"></a>    <span class="c1">// Initial displacement</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-10"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">y0</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span> <span class="c1">// m</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-11"></a>    <span class="k">const</span> <span class="n">label</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-12"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">endTime</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="c1">// s</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-13"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-14"></a>    <span class="c1">// Create the ODE system as object of type myODE</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-15"></a>    <span class="n">myODE</span> <span class="n">ode</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span><span class="n">stiff</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-16"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-17"></a>    <span class="c1">// Create dictionary and add the odeSolver name</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-18"></a>    <span class="n">dictionary</span> <span class="n">dict</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-19"></a>    <span class="n">dict</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">"solver"</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-20"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-21"></a>    <span class="c1">// Create the selected ODE system solver</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-22"></a>    <span class="n">autoPtr</span><span class="o">&lt;</span><span class="n">ODESolver</span><span class="o">&gt;</span> <span class="n">odeSolver</span> <span class="o">=</span> <span class="n">ODESolver</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">ode</span><span class="p">,</span> <span class="n">dict</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-23"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-24"></a>    <span class="c1">// Initialise the ODE system fields</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-25"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-26"></a>    <span class="c1">// Start time</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-27"></a>    <span class="n">scalar</span> <span class="n">xStart</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-28"></a>    <span class="c1">// time step</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-29"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">endTime</span><span class="o">/</span><span class="n">n</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-30"></a>    <span class="c1">// Initial displacement and velocity</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-31"></a>    <span class="n">scalarField</span> <span class="n">yStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-32"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y0</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-33"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-34"></a>    <span class="c1">// integration initial step</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-35"></a>    <span class="n">scalar</span> <span class="n">dxEst</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-36"></a>    <span class="n">scalar</span> <span class="n">xEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-37"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-38"></a>    <span class="c1">// Required to store dydx</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-39"></a>    <span class="n">scalarField</span> <span class="n">dyStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-40"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-41"></a>    <span class="c1">// Integration loop</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-42"></a>    <span class="k">for</span> <span class="p">(</span><span class="n">label</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-43"></a>    <span class="p">{</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-44"></a>        <span class="n">xEnd</span> <span class="o">=</span> <span class="n">xStart</span> <span class="o">+</span> <span class="n">dx</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-45"></a>        <span class="n">ode</span><span class="p">.</span><span class="n">derivatives</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dyStart</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-46"></a>        <span class="n">odeSolver</span><span class="o">-&gt;</span><span class="n">solve</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">xEnd</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dxEst</span><span class="p">);</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-47"></a>        <span class="n">xStart</span> <span class="o">=</span> <span class="n">xEnd</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-48"></a>        <span class="n">Info</span> <span class="o">&lt;&lt;</span> <span class="n">xStart</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-49"></a>    <span class="p">}</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-50"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-51"></a>    <span class="n">Info</span><span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">End</span><span class="se">\n</span><span class="s">"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-52"></a>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-53"></a>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<a name="rest_code_264ee40db3f04e87bd94760642d188e4-54"></a><span class="p">}</span>
+<td class="linenos"><div class="linenodiv"><pre><a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-1"> 1</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-2"> 2</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-3"> 3</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-4"> 4</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-5"> 5</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-6"> 6</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-7"> 7</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-8"> 8</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-9"> 9</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-10">10</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-11">11</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-12">12</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-13">13</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-14">14</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-15">15</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-16">16</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-17">17</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-18">18</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-19">19</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-20">20</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-21">21</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-22">22</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-23">23</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-24">24</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-25">25</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-26">26</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-27">27</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-28">28</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-29">29</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-30">30</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-31">31</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-32">32</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-33">33</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-34">34</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-35">35</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-36">36</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-37">37</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-38">38</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-39">39</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-40">40</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-41">41</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-42">42</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-43">43</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-44">44</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-45">45</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-46">46</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-47">47</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-48">48</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-49">49</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-50">50</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-51">51</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-52">52</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-53">53</a>
+<a href="#rest_code_3484ba400a614eab8c0643a74dd6ebda-54">54</a></pre></div></td>
+<td class="code"><pre class="code c++"><a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-1"></a><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-2"></a><span class="p">{</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-3"></a>    <span class="n">argList</span><span class="o">::</span><span class="n">validArgs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"ODESolver"</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-4"></a>    <span class="n">argList</span> <span class="n">args</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-5"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-6"></a>    <span class="c1">// system properties (mass and stiffness)</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-7"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">mass</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="c1">// Kg</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-8"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">stiff</span> <span class="o">=</span> <span class="mf">2048.0</span><span class="p">;</span> <span class="c1">// N/m</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-9"></a>    <span class="c1">// Initial displacement</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-10"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">y0</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span> <span class="c1">// m</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-11"></a>    <span class="k">const</span> <span class="n">label</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-12"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">endTime</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="c1">// s</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-13"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-14"></a>    <span class="c1">// Create the ODE system as object of type myODE</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-15"></a>    <span class="n">myODE</span> <span class="n">ode</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span><span class="n">stiff</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-16"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-17"></a>    <span class="c1">// Create dictionary and add the odeSolver name</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-18"></a>    <span class="n">dictionary</span> <span class="n">dict</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-19"></a>    <span class="n">dict</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="s">"solver"</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-20"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-21"></a>    <span class="c1">// Create the selected ODE system solver</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-22"></a>    <span class="n">autoPtr</span><span class="o">&lt;</span><span class="n">ODESolver</span><span class="o">&gt;</span> <span class="n">odeSolver</span> <span class="o">=</span> <span class="n">ODESolver</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">ode</span><span class="p">,</span> <span class="n">dict</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-23"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-24"></a>    <span class="c1">// Initialise the ODE system fields</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-25"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-26"></a>    <span class="c1">// Start time</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-27"></a>    <span class="n">scalar</span> <span class="n">xStart</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-28"></a>    <span class="c1">// time step</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-29"></a>    <span class="k">const</span> <span class="n">scalar</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">endTime</span><span class="o">/</span><span class="n">n</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-30"></a>    <span class="c1">// Initial displacement and velocity</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-31"></a>    <span class="n">scalarField</span> <span class="n">yStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-32"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y0</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-33"></a>    <span class="n">yStart</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-34"></a>    <span class="c1">// integration initial step</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-35"></a>    <span class="n">scalar</span> <span class="n">dxEst</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-36"></a>    <span class="n">scalar</span> <span class="n">xEnd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-37"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-38"></a>    <span class="c1">// Required to store dydx</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-39"></a>    <span class="n">scalarField</span> <span class="n">dyStart</span><span class="p">(</span><span class="n">ode</span><span class="p">.</span><span class="n">nEqns</span><span class="p">());</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-40"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-41"></a>    <span class="c1">// Integration loop</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-42"></a>    <span class="k">for</span> <span class="p">(</span><span class="n">label</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-43"></a>    <span class="p">{</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-44"></a>        <span class="n">xEnd</span> <span class="o">=</span> <span class="n">xStart</span> <span class="o">+</span> <span class="n">dx</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-45"></a>        <span class="n">ode</span><span class="p">.</span><span class="n">derivatives</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dyStart</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-46"></a>        <span class="n">odeSolver</span><span class="o">-&gt;</span><span class="n">solve</span><span class="p">(</span><span class="n">xStart</span><span class="p">,</span> <span class="n">xEnd</span><span class="p">,</span> <span class="n">yStart</span><span class="p">,</span> <span class="n">dxEst</span><span class="p">);</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-47"></a>        <span class="n">xStart</span> <span class="o">=</span> <span class="n">xEnd</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-48"></a>        <span class="n">Info</span> <span class="o">&lt;&lt;</span> <span class="n">xStart</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">yStart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-49"></a>    <span class="p">}</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-50"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-51"></a>    <span class="n">Info</span><span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">End</span><span class="se">\n</span><span class="s">"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-52"></a>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-53"></a>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<a name="rest_code_3484ba400a614eab8c0643a74dd6ebda-54"></a><span class="p">}</span>
 </pre></td>
 </tr></table>
 <p>Finally, compile the code and run it. Direct the output to a file so it could be
 used for postprocessing.</p>
-<pre class="code console"><a name="rest_code_4591abca793d4945979e9e4591ff6845-1"></a><span class="gp">$</span> wmake
-<a name="rest_code_4591abca793d4945979e9e4591ff6845-2"></a><span class="gp">$</span> Test-ODE RKCK45 &gt; log
+<pre class="code console"><a name="rest_code_1284d6045b484ffdbf29cc3af0b383ca-1"></a><span class="gp">$</span> wmake
+<a name="rest_code_1284d6045b484ffdbf29cc3af0b383ca-2"></a><span class="gp">$</span> Test-ODE RKCK45 &gt; log
 </pre>
 </div>
 </div>
@@ -550,19 +550,19 @@ the results.</p>
 <td class="field-body"></td>
 </tr></tbody>
 </table>
-<pre class="code bash"><a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-1"></a><span class="c1"># system properties</span>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-2"></a><span class="nv">mass</span> <span class="o">=</span> 2.0
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-3"></a><span class="nv">stiff</span> <span class="o">=</span> 2048.0
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-4"></a><span class="nv">x0</span> <span class="o">=</span> 0.2
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-5"></a>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-6"></a><span class="nb">set</span> grid
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-7"></a><span class="nb">set</span> samples 200
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-8"></a><span class="nb">set</span> xlabel <span class="s1">'Time (s)'</span>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-9"></a><span class="nb">set</span> ylabel <span class="s1">'Displacement (m)'</span>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-10"></a><span class="nb">set</span> yrange <span class="o">[</span>-0.3:0.3<span class="o">]</span>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-11"></a>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-12"></a>f<span class="o">(</span>x<span class="o">)</span> <span class="o">=</span> x0*cos<span class="o">(</span>sqrt<span class="o">(</span>stiff/mass<span class="o">)</span>*x<span class="o">)</span>
-<a name="rest_code_3b8d9f77f4104468a2e7a760fdc5ec89-13"></a>plot <span class="s1">'log'</span> u 1:2 w p lw <span class="m">2</span> t <span class="s2">"OpenFOAM"</span>, f<span class="o">(</span>x<span class="o">)</span> w l lw <span class="m">2</span> t <span class="s2">"Exact"</span>
+<pre class="code bash"><a name="rest_code_4c65aefe9d9a4c50808821df52582d40-1"></a><span class="c1"># system properties</span>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-2"></a><span class="nv">mass</span> <span class="o">=</span> 2.0
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-3"></a><span class="nv">stiff</span> <span class="o">=</span> 2048.0
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-4"></a><span class="nv">x0</span> <span class="o">=</span> 0.2
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-5"></a>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-6"></a><span class="nb">set</span> grid
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-7"></a><span class="nb">set</span> samples 200
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-8"></a><span class="nb">set</span> xlabel <span class="s1">'Time (s)'</span>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-9"></a><span class="nb">set</span> ylabel <span class="s1">'Displacement (m)'</span>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-10"></a><span class="nb">set</span> yrange <span class="o">[</span>-0.3:0.3<span class="o">]</span>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-11"></a>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-12"></a>f<span class="o">(</span>x<span class="o">)</span> <span class="o">=</span> x0*cos<span class="o">(</span>sqrt<span class="o">(</span>stiff/mass<span class="o">)</span>*x<span class="o">)</span>
+<a name="rest_code_4c65aefe9d9a4c50808821df52582d40-13"></a>plot <span class="s1">'log'</span> u 1:2 w p lw <span class="m">2</span> t <span class="s2">"OpenFOAM"</span>, f<span class="o">(</span>x<span class="o">)</span> w l lw <span class="m">2</span> t <span class="s2">"Exact"</span>
 </pre>
 </div>
 <div class="section" id="final-remarks">
