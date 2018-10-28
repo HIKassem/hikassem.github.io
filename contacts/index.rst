@@ -9,7 +9,7 @@
 
 
 
-|RG|_   |tw|_   |in|_   |git|_
+|RG|_   |tw|_   |in|_ |XNG|_ |git|_
 
 .. |tw| image:: /images/tw.png
    :height: 124 px
@@ -21,10 +21,14 @@
 .. |in| image:: /images/in.png
    :scale: 100%
    :align: middle
+.. |XNG| image:: /images/XNG.png
+   :scale: 100%
+   :align: middle
 .. |git| image:: /images/git.png
    :scale: 100%
    :align: middle
 .. _tw : https://twitter.com/HIKassem
 .. _RG : https://www.researchgate.net/profile/Hassan_Kassem10
 .. _in : https://uk.linkedin.com/in/hassankassem10
+.. _XNG : https://www.xing.com/profile/Hassan_Kassem5/cv?sc_o=mxb_p
 .. _git : https://github.com/HIKassem
