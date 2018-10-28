@@ -14,6 +14,7 @@ Research Interests
 My main focus area is in Computational Fluid Dynamics (CFD) with particular
 emphasis on the following areas:
 
+- Wind Farm Micro-sitting
 - Fluid-Structure interaction (Aeroelasticity)
 - Turbulence simulation/modelling
 - Turbulent reacting flow
@@ -24,8 +25,8 @@ emphasis on the following areas:
 Education
 ---------
 
-- :September 2012 -- present:
-    | Ph.D, Department of Mechanical Engineering and Aeronautics, City University London, UK.
+- :September 2012 -- 2017:
+    | Ph.D, Department of Mechanical Engineering and Aeronautics, City University of London, UK.
     | Thesis title: *"Flutter Prediction of Composite Wings Using Coupled DSM-CFD Model in Transonic Flow"*
 - :January 2010 -- November 2011:
     | M.Eng, Mechanical Engineering (Research), Universiti Teknologi Malaysia, Malaysia.
@@ -43,6 +44,7 @@ Research
 My postgraduate research is focused on computational fluid dynamics using and
 developing codes since 2010. The main areas of expertise are:
 
+- ABL modelling for wind energy applications.
 - Numerical modelling of fluid-structure interaction in external flow problems.
 - Dynamics response analysis of aircraft wings.
 - Turbulent combustion modelling of jet and swirling flames.
@@ -58,11 +60,9 @@ Teaching
 
 Work
 ~~~~
-- :November 2008 -- December 2009: Mechanical Technical Support Engineer, National Water Works Co., Riyadh, KSA.
+- :February 2017 -- present: Research Associate, `Fraunhofer Institute for Wind Energy Systems (IWES)`__, Oldenburg, Germany
 
-    - Supporting sales department to meet the clients’ technical requirements.
-    - Studying the governmental tenders and submitting the proper technical proposals.
-    - Providing the preliminary hydraulic studies and coordinating with the local and international consultants.
+.. __: https://www.iwes.fraunhofer.de/en.html
 
 Computer Skills
 ~~~~~~~~~~~~~~~
