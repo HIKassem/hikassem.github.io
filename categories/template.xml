@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hassan Kassem (template)</title><link>http://hassankassem.me/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://hassankassem.me/categories/template.xml"></atom:link><language>en</language><lastBuildDate>Tue, 28 Jun 2016 10:38:27 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>How to add a turbulence model in OpenFOAM-3.0.0</title><link>http://hassankassem.me/posts/newturbulencemodel/</link><dc:creator>Hassan Kassem</dc:creator><description>&lt;div&gt;&lt;div class="figure"&gt;
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"><channel><title>Hassan Kassem (template)</title><link>http://hassankassem.me/</link><description></description><atom:link type="application/rss+xml" rel="self" href="http://hassankassem.me/categories/template.xml"></atom:link><language>en</language><lastBuildDate>Sun, 28 Oct 2018 14:46:51 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>How to add a new turbulence model, revisited</title><link>http://hassankassem.me/posts/newturbulencemodel6/</link><dc:creator>Hassan Kassem</dc:creator><description>&lt;div&gt;&lt;div class="figure"&gt;
+&lt;a class="reference external image-reference" href="http://hassankassem.me/images/template6.png"&gt;&lt;img alt="/images/template6.png" src="http://hassankassem.me/images/template6.png"&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;div class="line-block"&gt;
+&lt;div class="line"&gt;&lt;br&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;In this post, &lt;a class="reference external" href="http://hassankassem.me/posts/newturbulencemodel/"&gt;my old tutorial&lt;/a&gt; on how to implement a new turbulence model in OpenFOAM-3.0 is revisited.
+The old post is over two years old and since then a lot of changes in OpenFOAM
+have been introduced by OpenFOAM foundation.
+Fortunately, implementing a new model in OpenFOAM-5.0 upwards is much easier now.
+Therefore, this will be a very short post since all the basics has been covered
+in the previous post.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://hassankassem.me/posts/newturbulencemodel6/"&gt; click to read the rest of the article …&lt;/a&gt; (2 min remaining to read)&lt;/p&gt;&lt;/div&gt;</description><category>C++</category><category>OpenFOAM</category><category>template</category><category>turbulenceModels</category><guid>http://hassankassem.me/posts/newturbulencemodel6/</guid><pubDate>Sun, 28 Oct 2018 11:55:47 GMT</pubDate></item><item><title>How to add a turbulence model in OpenFOAM-3.0.0</title><link>http://hassankassem.me/posts/newturbulencemodel/</link><dc:creator>Hassan Kassem</dc:creator><description>&lt;div&gt;&lt;div class="figure"&gt;
 &lt;a class="reference external image-reference" href="http://hassankassem.me/images/template.png"&gt;&lt;img alt="/images/template.png" src="http://hassankassem.me/images/template.png"&gt;&lt;/a&gt;
 &lt;/div&gt;
 &lt;div class="line-block"&gt;

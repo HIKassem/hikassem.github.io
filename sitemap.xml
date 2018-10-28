@@ -7,15 +7,19 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://hassankassem.me/</loc>
-  <lastmod>2016-06-28T10:38:00Z</lastmod>
+  <lastmod>2018-10-28T12:04:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/2016/</loc>
   <lastmod>2016-06-28T10:38:00Z</lastmod>
  </url>
  <url>
+  <loc>http://hassankassem.me/2018/</loc>
+  <lastmod>2018-10-28T12:04:00Z</lastmod>
+ </url>
+ <url>
   <loc>http://hassankassem.me/archive.html</loc>
-  <lastmod>2016-06-28T10:38:00Z</lastmod>
+  <lastmod>2018-10-28T12:04:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/categories/</loc>
@@ -123,7 +127,7 @@
  </url>
  <url>
   <loc>http://hassankassem.me/posts/</loc>
-  <lastmod>2016-06-28T10:38:00Z</lastmod>
+  <lastmod>2018-10-28T12:04:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/posts/my-first-post/</loc>
@@ -132,6 +136,10 @@
  <url>
   <loc>http://hassankassem.me/posts/newturbulencemodel/</loc>
   <lastmod>2016-06-28T10:38:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://hassankassem.me/posts/newturbulencemodel6/</loc>
+  <lastmod>2018-10-28T12:04:00Z</lastmod>
  </url>
  <url>
   <loc>http://hassankassem.me/posts/ode/</loc>
